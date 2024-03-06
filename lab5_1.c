@@ -210,7 +210,7 @@ float Volts_at_Pin(unsigned char pin)
 void main (void)
 {
 	float v[2];
-	float half_period;
+	//float half_period;
 	float overflow_count;
 	float period;
 
@@ -235,32 +235,48 @@ void main (void)
 
 	while(1)
 	{
-		// Half period of the reference signal, at P1.4
-		// Start tracking the reference signal
+        // Start tracking the reference signal
 		ADC0MX = QFP32_MUX_P1_4;
 		ADINT = 0;
 		ADBUSY=1;
-		while (!ADINT); // Wait for conversion to complete
-		// Reset the timer
-		TL0=0;
-		TH0=0;
-		while (Get_ADC()!=0); // Wait for the signal to be zero
-		while (Get_ADC()==0); // Wait for the signal to be positive
-		TR0=1; // Start the timer 0
-		while (Get_ADC()!=0); // Wait for the signal to be zero again
-		TR0=0; // Stop timer 0
-		half_period=TH0*256.0+TL0; // The 16-bit number [TH0-TL0]
-		// Time from the beginning of the sine wave to its peak
-		overflow_count=65536-(half_period/2);
+        while (!ADINT); // Wait for conversion to complete
 
-		period=2000*half_period*12/SYSCLK;
+		// Reset the counter
+		TL0=0; 
+		TH0=0;
+		TF0=0;
+		overflow_count=0;
+		
+		while(Get_ADC()!=0); // Wait for the signal to be zero
+		while(Get_ADC()==0); // Wait for the signal to be one
+		TR0=1; // Start the timer
+		while(Get_ADC()!=0) // Wait for the signal to be zero
+		{
+			if(TF0==1) // Did the 16-bit timer overflow?
+			{
+				TF0=0;
+				overflow_count++;
+			}
+		}
+		while(Get_ADC()==0) // Wait for the signal to be one
+		{
+			if(TF0==1) // Did the 16-bit timer overflow?
+			{
+				TF0=0;
+				overflow_count++;
+			}
+		}
+		TR0=0; // Stop timer 0, the 24-bit number [overflow_count-TH0-TL0] has the period!
+		period=(overflow_count*65536.0+TH0*256.0+TL0)*(12.0/SYSCLK);
+		
 	    // Read 14-bit value from the pins configured as analog inputs
 		v[0] = Volts_at_Pin(QFP32_MUX_P1_4);
 		//v[1] = Volts_at_Pin(QFP32_MUX_P2_3);
 		//v[2] = Volts_at_Pin(QFP32_MUX_P2_4);
 		//v[3] = Volts_at_Pin(QFP32_MUX_P2_5);
 		printf ("V@P1.4=%7.5f\r\n", v[0]);
-		printf("Period=%7.5f ms\r\n",period);
+		// Send the period to the serial port
+		printf( "\rPeriod=%f ms    ", period*1000.0);
 		waitms(500);
 	 }  
 }	
