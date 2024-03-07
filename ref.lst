@@ -1,0 +1,1926 @@
+0000              1   ;--------------------------------------------------------
+0000              2   ; File Created by C51
+0000              3   ; Version 1.0.0 #1170 (Feb 16 2022) (MSVC)
+0000              4   ; This file was generated Wed Mar 06 13:32:37 2024
+0000              5   ;--------------------------------------------------------
+                  5   $name ref
+                  6   $optc51 --model-small
+                  7   $printf_float
+0000              9            R_DSEG    segment data
+0000             10            R_CSEG    segment code
+0000             11            R_BSEG    segment bit
+0000             12            R_XSEG    segment xdata
+0000             13            R_PSEG    segment xdata
+0000             14            R_ISEG    segment idata
+0000             15            R_OSEG    segment data overlay
+0000             16            BIT_BANK  segment data overlay
+0000             17            R_HOME    segment code
+0000             18            R_GSINIT  segment code
+0000             19            R_IXSEG   segment xdata
+0000             20            R_CONST   segment code
+0000             21            R_XINIT   segment code
+0000             22            R_DINIT   segment code
+0000             23   
+0000             24   ;--------------------------------------------------------
+0000             25   ; Public variables in this module
+0000             26   ;--------------------------------------------------------
+0000             27            public _InitPinADC_PARM_2
+0000             28            public _main
+0000             29            public _Get_ADC
+0000             30            public _LCDprint2
+0000             31            public _LCDprint
+0000             32            public _LCD_4BIT
+0000             33            public _WriteCommand
+0000             34            public _WriteData
+0000             35            public _LCD_byte
+0000             36            public _LCD_pulse
+0000             37            public _Volts_at_Pin
+0000             38            public _ADC_at_Pin
+0000             39            public _InitPinADC
+0000             40            public _TIMER0_Init
+0000             41            public _waitms
+0000             42            public _Timer3us
+0000             43            public _InitADC
+0000             44            public __c51_external_startup
+0000             45            public _LCDprint_PARM_3
+0000             46            public _LCDprint2_PARM_3
+0000             47            public _LCDprint2_PARM_2
+0000             48            public _LCDprint_PARM_2
+0000             49            public _overflow_count2
+0000             50            public _overflow_count1
+0000             51   ;--------------------------------------------------------
+0000             52   ; Special Function Registers
+0000             53   ;--------------------------------------------------------
+0000             54   _ACC            DATA 0xe0
+0000             55   _ADC0ASAH       DATA 0xb6
+0000             56   _ADC0ASAL       DATA 0xb5
+0000             57   _ADC0ASCF       DATA 0xa1
+0000             58   _ADC0ASCT       DATA 0xc7
+0000             59   _ADC0CF0        DATA 0xbc
+0000             60   _ADC0CF1        DATA 0xb9
+0000             61   _ADC0CF2        DATA 0xdf
+0000             62   _ADC0CN0        DATA 0xe8
+0000             63   _ADC0CN1        DATA 0xb2
+0000             64   _ADC0CN2        DATA 0xb3
+0000             65   _ADC0GTH        DATA 0xc4
+0000             66   _ADC0GTL        DATA 0xc3
+0000             67   _ADC0H          DATA 0xbe
+0000             68   _ADC0L          DATA 0xbd
+0000             69   _ADC0LTH        DATA 0xc6
+0000             70   _ADC0LTL        DATA 0xc5
+0000             71   _ADC0MX         DATA 0xbb
+0000             72   _B              DATA 0xf0
+0000             73   _CKCON0         DATA 0x8e
+0000             74   _CKCON1         DATA 0xa6
+0000             75   _CLEN0          DATA 0xc6
+0000             76   _CLIE0          DATA 0xc7
+0000             77   _CLIF0          DATA 0xe8
+0000             78   _CLKSEL         DATA 0xa9
+0000             79   _CLOUT0         DATA 0xd1
+0000             80   _CLU0CF         DATA 0xb1
+0000             81   _CLU0FN         DATA 0xaf
+0000             82   _CLU0MX         DATA 0x84
+0000             83   _CLU1CF         DATA 0xb3
+0000             84   _CLU1FN         DATA 0xb2
+0000             85   _CLU1MX         DATA 0x85
+0000             86   _CLU2CF         DATA 0xb6
+0000             87   _CLU2FN         DATA 0xb5
+0000             88   _CLU2MX         DATA 0x91
+0000             89   _CLU3CF         DATA 0xbf
+0000             90   _CLU3FN         DATA 0xbe
+0000             91   _CLU3MX         DATA 0xae
+0000             92   _CMP0CN0        DATA 0x9b
+0000             93   _CMP0CN1        DATA 0x99
+0000             94   _CMP0MD         DATA 0x9d
+0000             95   _CMP0MX         DATA 0x9f
+0000             96   _CMP1CN0        DATA 0xbf
+0000             97   _CMP1CN1        DATA 0xac
+0000             98   _CMP1MD         DATA 0xab
+0000             99   _CMP1MX         DATA 0xaa
+0000            100   _CRC0CN0        DATA 0xce
+0000            101   _CRC0CN1        DATA 0x86
+0000            102   _CRC0CNT        DATA 0xd3
+0000            103   _CRC0DAT        DATA 0xcb
+0000            104   _CRC0FLIP       DATA 0xcf
+0000            105   _CRC0IN         DATA 0xca
+0000            106   _CRC0ST         DATA 0xd2
+0000            107   _DAC0CF0        DATA 0x91
+0000            108   _DAC0CF1        DATA 0x92
+0000            109   _DAC0H          DATA 0x85
+0000            110   _DAC0L          DATA 0x84
+0000            111   _DAC1CF0        DATA 0x93
+0000            112   _DAC1CF1        DATA 0x94
+0000            113   _DAC1H          DATA 0x8a
+0000            114   _DAC1L          DATA 0x89
+0000            115   _DAC2CF0        DATA 0x95
+0000            116   _DAC2CF1        DATA 0x96
+0000            117   _DAC2H          DATA 0x8c
+0000            118   _DAC2L          DATA 0x8b
+0000            119   _DAC3CF0        DATA 0x9a
+0000            120   _DAC3CF1        DATA 0x9c
+0000            121   _DAC3H          DATA 0x8e
+0000            122   _DAC3L          DATA 0x8d
+0000            123   _DACGCF0        DATA 0x88
+0000            124   _DACGCF1        DATA 0x98
+0000            125   _DACGCF2        DATA 0xa2
+0000            126   _DERIVID        DATA 0xad
+0000            127   _DEVICEID       DATA 0xb5
+0000            128   _DPH            DATA 0x83
+0000            129   _DPL            DATA 0x82
+0000            130   _EIE1           DATA 0xe6
+0000            131   _EIE2           DATA 0xf3
+0000            132   _EIP1           DATA 0xbb
+0000            133   _EIP1H          DATA 0xee
+0000            134   _EIP2           DATA 0xed
+0000            135   _EIP2H          DATA 0xf6
+0000            136   _EMI0CN         DATA 0xe7
+0000            137   _FLKEY          DATA 0xb7
+0000            138   _HFO0CAL        DATA 0xc7
+0000            139   _HFO1CAL        DATA 0xd6
+0000            140   _HFOCN          DATA 0xef
+0000            141   _I2C0ADM        DATA 0xff
+0000            142   _I2C0CN0        DATA 0xba
+0000            143   _I2C0DIN        DATA 0xbc
+0000            144   _I2C0DOUT       DATA 0xbb
+0000            145   _I2C0FCN0       DATA 0xad
+0000            146   _I2C0FCN1       DATA 0xab
+0000            147   _I2C0FCT        DATA 0xf5
+0000            148   _I2C0SLAD       DATA 0xbd
+0000            149   _I2C0STAT       DATA 0xb9
+0000            150   _IE             DATA 0xa8
+0000            151   _IP             DATA 0xb8
+0000            152   _IPH            DATA 0xf2
+0000            153   _IT01CF         DATA 0xe4
+0000            154   _LFO0CN         DATA 0xb1
+0000            155   _P0             DATA 0x80
+0000            156   _P0MASK         DATA 0xfe
+0000            157   _P0MAT          DATA 0xfd
+0000            158   _P0MDIN         DATA 0xf1
+0000            159   _P0MDOUT        DATA 0xa4
+0000            160   _P0SKIP         DATA 0xd4
+0000            161   _P1             DATA 0x90
+0000            162   _P1MASK         DATA 0xee
+0000            163   _P1MAT          DATA 0xed
+0000            164   _P1MDIN         DATA 0xf2
+0000            165   _P1MDOUT        DATA 0xa5
+0000            166   _P1SKIP         DATA 0xd5
+0000            167   _P2             DATA 0xa0
+0000            168   _P2MASK         DATA 0xfc
+0000            169   _P2MAT          DATA 0xfb
+0000            170   _P2MDIN         DATA 0xf3
+0000            171   _P2MDOUT        DATA 0xa6
+0000            172   _P2SKIP         DATA 0xcc
+0000            173   _P3             DATA 0xb0
+0000            174   _P3MDIN         DATA 0xf4
+0000            175   _P3MDOUT        DATA 0x9c
+0000            176   _PCA0CENT       DATA 0x9e
+0000            177   _PCA0CLR        DATA 0x9c
+0000            178   _PCA0CN0        DATA 0xd8
+0000            179   _PCA0CPH0       DATA 0xfc
+0000            180   _PCA0CPH1       DATA 0xea
+0000            181   _PCA0CPH2       DATA 0xec
+0000            182   _PCA0CPH3       DATA 0xf5
+0000            183   _PCA0CPH4       DATA 0x85
+0000            184   _PCA0CPH5       DATA 0xde
+0000            185   _PCA0CPL0       DATA 0xfb
+0000            186   _PCA0CPL1       DATA 0xe9
+0000            187   _PCA0CPL2       DATA 0xeb
+0000            188   _PCA0CPL3       DATA 0xf4
+0000            189   _PCA0CPL4       DATA 0x84
+0000            190   _PCA0CPL5       DATA 0xdd
+0000            191   _PCA0CPM0       DATA 0xda
+0000            192   _PCA0CPM1       DATA 0xdb
+0000            193   _PCA0CPM2       DATA 0xdc
+0000            194   _PCA0CPM3       DATA 0xae
+0000            195   _PCA0CPM4       DATA 0xaf
+0000            196   _PCA0CPM5       DATA 0xcc
+0000            197   _PCA0H          DATA 0xfa
+0000            198   _PCA0L          DATA 0xf9
+0000            199   _PCA0MD         DATA 0xd9
+0000            200   _PCA0POL        DATA 0x96
+0000            201   _PCA0PWM        DATA 0xf7
+0000            202   _PCON0          DATA 0x87
+0000            203   _PCON1          DATA 0xcd
+0000            204   _PFE0CN         DATA 0xc1
+0000            205   _PRTDRV         DATA 0xf6
+0000            206   _PSCTL          DATA 0x8f
+0000            207   _PSTAT0         DATA 0xaa
+0000            208   _PSW            DATA 0xd0
+0000            209   _REF0CN         DATA 0xd1
+0000            210   _REG0CN         DATA 0xc9
+0000            211   _REVID          DATA 0xb6
+0000            212   _RSTSRC         DATA 0xef
+0000            213   _SBCON1         DATA 0x94
+0000            214   _SBRLH1         DATA 0x96
+0000            215   _SBRLL1         DATA 0x95
+0000            216   _SBUF           DATA 0x99
+0000            217   _SBUF0          DATA 0x99
+0000            218   _SBUF1          DATA 0x92
+0000            219   _SCON           DATA 0x98
+0000            220   _SCON0          DATA 0x98
+0000            221   _SCON1          DATA 0xc8
+0000            222   _SFRPAGE        DATA 0xa7
+0000            223   _SFRPGCN        DATA 0xbc
+0000            224   _SFRSTACK       DATA 0xd7
+0000            225   _SMB0ADM        DATA 0xd6
+0000            226   _SMB0ADR        DATA 0xd7
+0000            227   _SMB0CF         DATA 0xc1
+0000            228   _SMB0CN0        DATA 0xc0
+0000            229   _SMB0DAT        DATA 0xc2
+0000            230   _SMB0FCN0       DATA 0xc3
+0000            231   _SMB0FCN1       DATA 0xc4
+0000            232   _SMB0FCT        DATA 0xef
+0000            233   _SMB0RXLN       DATA 0xc5
+0000            234   _SMB0TC         DATA 0xac
+0000            235   _SMOD1          DATA 0x93
+0000            236   _SP             DATA 0x81
+0000            237   _SPI0CFG        DATA 0xa1
+0000            238   _SPI0CKR        DATA 0xa2
+0000            239   _SPI0CN0        DATA 0xf8
+0000            240   _SPI0DAT        DATA 0xa3
+0000            241   _SPI0FCN0       DATA 0x9a
+0000            242   _SPI0FCN1       DATA 0x9b
+0000            243   _SPI0FCT        DATA 0xf7
+0000            244   _SPI0PCF        DATA 0xdf
+0000            245   _TCON           DATA 0x88
+0000            246   _TH0            DATA 0x8c
+0000            247   _TH1            DATA 0x8d
+0000            248   _TL0            DATA 0x8a
+0000            249   _TL1            DATA 0x8b
+0000            250   _TMOD           DATA 0x89
+0000            251   _TMR2CN0        DATA 0xc8
+0000            252   _TMR2CN1        DATA 0xfd
+0000            253   _TMR2H          DATA 0xcf
+0000            254   _TMR2L          DATA 0xce
+0000            255   _TMR2RLH        DATA 0xcb
+0000            256   _TMR2RLL        DATA 0xca
+0000            257   _TMR3CN0        DATA 0x91
+0000            258   _TMR3CN1        DATA 0xfe
+0000            259   _TMR3H          DATA 0x95
+0000            260   _TMR3L          DATA 0x94
+0000            261   _TMR3RLH        DATA 0x93
+0000            262   _TMR3RLL        DATA 0x92
+0000            263   _TMR4CN0        DATA 0x98
+0000            264   _TMR4CN1        DATA 0xff
+0000            265   _TMR4H          DATA 0xa5
+0000            266   _TMR4L          DATA 0xa4
+0000            267   _TMR4RLH        DATA 0xa3
+0000            268   _TMR4RLL        DATA 0xa2
+0000            269   _TMR5CN0        DATA 0xc0
+0000            270   _TMR5CN1        DATA 0xf1
+0000            271   _TMR5H          DATA 0xd5
+0000            272   _TMR5L          DATA 0xd4
+0000            273   _TMR5RLH        DATA 0xd3
+0000            274   _TMR5RLL        DATA 0xd2
+0000            275   _UART0PCF       DATA 0xd9
+0000            276   _UART1FCN0      DATA 0x9d
+0000            277   _UART1FCN1      DATA 0xd8
+0000            278   _UART1FCT       DATA 0xfa
+0000            279   _UART1LIN       DATA 0x9e
+0000            280   _UART1PCF       DATA 0xda
+0000            281   _VDM0CN         DATA 0xff
+0000            282   _WDTCN          DATA 0x97
+0000            283   _XBR0           DATA 0xe1
+0000            284   _XBR1           DATA 0xe2
+0000            285   _XBR2           DATA 0xe3
+0000            286   _XOSC0CN        DATA 0x86
+0000            287   _DPTR           DATA 0x8382
+0000            288   _TMR2RL         DATA 0xcbca
+0000            289   _TMR3RL         DATA 0x9392
+0000            290   _TMR4RL         DATA 0xa3a2
+0000            291   _TMR5RL         DATA 0xd3d2
+0000            292   _TMR0           DATA 0x8c8a
+0000            293   _TMR1           DATA 0x8d8b
+0000            294   _TMR2           DATA 0xcfce
+0000            295   _TMR3           DATA 0x9594
+0000            296   _TMR4           DATA 0xa5a4
+0000            297   _TMR5           DATA 0xd5d4
+0000            298   _SBRL1          DATA 0x9695
+0000            299   _PCA0           DATA 0xfaf9
+0000            300   _PCA0CP0        DATA 0xfcfb
+0000            301   _PCA0CP1        DATA 0xeae9
+0000            302   _PCA0CP2        DATA 0xeceb
+0000            303   _PCA0CP3        DATA 0xf5f4
+0000            304   _PCA0CP4        DATA 0x8584
+0000            305   _PCA0CP5        DATA 0xdedd
+0000            306   _ADC0ASA        DATA 0xb6b5
+0000            307   _ADC0GT         DATA 0xc4c3
+0000            308   _ADC0           DATA 0xbebd
+0000            309   _ADC0LT         DATA 0xc6c5
+0000            310   _DAC0           DATA 0x8584
+0000            311   _DAC1           DATA 0x8a89
+0000            312   _DAC2           DATA 0x8c8b
+0000            313   _DAC3           DATA 0x8e8d
+0000            314   ;--------------------------------------------------------
+0000            315   ; special function bits
+0000            316   ;--------------------------------------------------------
+0000            317   _ACC_0          BIT 0xe0
+0000            318   _ACC_1          BIT 0xe1
+0000            319   _ACC_2          BIT 0xe2
+0000            320   _ACC_3          BIT 0xe3
+0000            321   _ACC_4          BIT 0xe4
+0000            322   _ACC_5          BIT 0xe5
+0000            323   _ACC_6          BIT 0xe6
+0000            324   _ACC_7          BIT 0xe7
+0000            325   _TEMPE          BIT 0xe8
+0000            326   _ADGN0          BIT 0xe9
+0000            327   _ADGN1          BIT 0xea
+0000            328   _ADWINT         BIT 0xeb
+0000            329   _ADBUSY         BIT 0xec
+0000            330   _ADINT          BIT 0xed
+0000            331   _IPOEN          BIT 0xee
+0000            332   _ADEN           BIT 0xef
+0000            333   _B_0            BIT 0xf0
+0000            334   _B_1            BIT 0xf1
+0000            335   _B_2            BIT 0xf2
+0000            336   _B_3            BIT 0xf3
+0000            337   _B_4            BIT 0xf4
+0000            338   _B_5            BIT 0xf5
+0000            339   _B_6            BIT 0xf6
+0000            340   _B_7            BIT 0xf7
+0000            341   _C0FIF          BIT 0xe8
+0000            342   _C0RIF          BIT 0xe9
+0000            343   _C1FIF          BIT 0xea
+0000            344   _C1RIF          BIT 0xeb
+0000            345   _C2FIF          BIT 0xec
+0000            346   _C2RIF          BIT 0xed
+0000            347   _C3FIF          BIT 0xee
+0000            348   _C3RIF          BIT 0xef
+0000            349   _D1SRC0         BIT 0x88
+0000            350   _D1SRC1         BIT 0x89
+0000            351   _D1AMEN         BIT 0x8a
+0000            352   _D01REFSL       BIT 0x8b
+0000            353   _D3SRC0         BIT 0x8c
+0000            354   _D3SRC1         BIT 0x8d
+0000            355   _D3AMEN         BIT 0x8e
+0000            356   _D23REFSL       BIT 0x8f
+0000            357   _D0UDIS         BIT 0x98
+0000            358   _D1UDIS         BIT 0x99
+0000            359   _D2UDIS         BIT 0x9a
+0000            360   _D3UDIS         BIT 0x9b
+0000            361   _EX0            BIT 0xa8
+0000            362   _ET0            BIT 0xa9
+0000            363   _EX1            BIT 0xaa
+0000            364   _ET1            BIT 0xab
+0000            365   _ES0            BIT 0xac
+0000            366   _ET2            BIT 0xad
+0000            367   _ESPI0          BIT 0xae
+0000            368   _EA             BIT 0xaf
+0000            369   _PX0            BIT 0xb8
+0000            370   _PT0            BIT 0xb9
+0000            371   _PX1            BIT 0xba
+0000            372   _PT1            BIT 0xbb
+0000            373   _PS0            BIT 0xbc
+0000            374   _PT2            BIT 0xbd
+0000            375   _PSPI0          BIT 0xbe
+0000            376   _P0_0           BIT 0x80
+0000            377   _P0_1           BIT 0x81
+0000            378   _P0_2           BIT 0x82
+0000            379   _P0_3           BIT 0x83
+0000            380   _P0_4           BIT 0x84
+0000            381   _P0_5           BIT 0x85
+0000            382   _P0_6           BIT 0x86
+0000            383   _P0_7           BIT 0x87
+0000            384   _P1_0           BIT 0x90
+0000            385   _P1_1           BIT 0x91
+0000            386   _P1_2           BIT 0x92
+0000            387   _P1_3           BIT 0x93
+0000            388   _P1_4           BIT 0x94
+0000            389   _P1_5           BIT 0x95
+0000            390   _P1_6           BIT 0x96
+0000            391   _P1_7           BIT 0x97
+0000            392   _P2_0           BIT 0xa0
+0000            393   _P2_1           BIT 0xa1
+0000            394   _P2_2           BIT 0xa2
+0000            395   _P2_3           BIT 0xa3
+0000            396   _P2_4           BIT 0xa4
+0000            397   _P2_5           BIT 0xa5
+0000            398   _P2_6           BIT 0xa6
+0000            399   _P3_0           BIT 0xb0
+0000            400   _P3_1           BIT 0xb1
+0000            401   _P3_2           BIT 0xb2
+0000            402   _P3_3           BIT 0xb3
+0000            403   _P3_4           BIT 0xb4
+0000            404   _P3_7           BIT 0xb7
+0000            405   _CCF0           BIT 0xd8
+0000            406   _CCF1           BIT 0xd9
+0000            407   _CCF2           BIT 0xda
+0000            408   _CCF3           BIT 0xdb
+0000            409   _CCF4           BIT 0xdc
+0000            410   _CCF5           BIT 0xdd
+0000            411   _CR             BIT 0xde
+0000            412   _CF             BIT 0xdf
+0000            413   _PARITY         BIT 0xd0
+0000            414   _F1             BIT 0xd1
+0000            415   _OV             BIT 0xd2
+0000            416   _RS0            BIT 0xd3
+0000            417   _RS1            BIT 0xd4
+0000            418   _F0             BIT 0xd5
+0000            419   _AC             BIT 0xd6
+0000            420   _CY             BIT 0xd7
+0000            421   _RI             BIT 0x98
+0000            422   _TI             BIT 0x99
+0000            423   _RB8            BIT 0x9a
+0000            424   _TB8            BIT 0x9b
+0000            425   _REN            BIT 0x9c
+0000            426   _CE             BIT 0x9d
+0000            427   _SMODE          BIT 0x9e
+0000            428   _RI1            BIT 0xc8
+0000            429   _TI1            BIT 0xc9
+0000            430   _RBX1           BIT 0xca
+0000            431   _TBX1           BIT 0xcb
+0000            432   _REN1           BIT 0xcc
+0000            433   _PERR1          BIT 0xcd
+0000            434   _OVR1           BIT 0xce
+0000            435   _SI             BIT 0xc0
+0000            436   _ACK            BIT 0xc1
+0000            437   _ARBLOST        BIT 0xc2
+0000            438   _ACKRQ          BIT 0xc3
+0000            439   _STO            BIT 0xc4
+0000            440   _STA            BIT 0xc5
+0000            441   _TXMODE         BIT 0xc6
+0000            442   _MASTER         BIT 0xc7
+0000            443   _SPIEN          BIT 0xf8
+0000            444   _TXNF           BIT 0xf9
+0000            445   _NSSMD0         BIT 0xfa
+0000            446   _NSSMD1         BIT 0xfb
+0000            447   _RXOVRN         BIT 0xfc
+0000            448   _MODF           BIT 0xfd
+0000            449   _WCOL           BIT 0xfe
+0000            450   _SPIF           BIT 0xff
+0000            451   _IT0            BIT 0x88
+0000            452   _IE0            BIT 0x89
+0000            453   _IT1            BIT 0x8a
+0000            454   _IE1            BIT 0x8b
+0000            455   _TR0            BIT 0x8c
+0000            456   _TF0            BIT 0x8d
+0000            457   _TR1            BIT 0x8e
+0000            458   _TF1            BIT 0x8f
+0000            459   _T2XCLK0        BIT 0xc8
+0000            460   _T2XCLK1        BIT 0xc9
+0000            461   _TR2            BIT 0xca
+0000            462   _T2SPLIT        BIT 0xcb
+0000            463   _TF2CEN         BIT 0xcc
+0000            464   _TF2LEN         BIT 0xcd
+0000            465   _TF2L           BIT 0xce
+0000            466   _TF2H           BIT 0xcf
+0000            467   _T4XCLK0        BIT 0x98
+0000            468   _T4XCLK1        BIT 0x99
+0000            469   _TR4            BIT 0x9a
+0000            470   _T4SPLIT        BIT 0x9b
+0000            471   _TF4CEN         BIT 0x9c
+0000            472   _TF4LEN         BIT 0x9d
+0000            473   _TF4L           BIT 0x9e
+0000            474   _TF4H           BIT 0x9f
+0000            475   _T5XCLK0        BIT 0xc0
+0000            476   _T5XCLK1        BIT 0xc1
+0000            477   _TR5            BIT 0xc2
+0000            478   _T5SPLIT        BIT 0xc3
+0000            479   _TF5CEN         BIT 0xc4
+0000            480   _TF5LEN         BIT 0xc5
+0000            481   _TF5L           BIT 0xc6
+0000            482   _TF5H           BIT 0xc7
+0000            483   _RIE            BIT 0xd8
+0000            484   _RXTO0          BIT 0xd9
+0000            485   _RXTO1          BIT 0xda
+0000            486   _RFRQ           BIT 0xdb
+0000            487   _TIE            BIT 0xdc
+0000            488   _TXHOLD         BIT 0xdd
+0000            489   _TXNF1          BIT 0xde
+0000            490   _TFRQ           BIT 0xdf
+0000            491   ;--------------------------------------------------------
+0000            492   ; overlayable register banks
+0000            493   ;--------------------------------------------------------
+0000            494            rbank0 segment data overlay
+0000            495   ;--------------------------------------------------------
+0000            496   ; internal ram data
+0000            497   ;--------------------------------------------------------
+0000            498            rseg R_DSEG
+0000            499   _overflow_count1:
+0000            500            ds 1
+0001            501   _overflow_count2:
+0001            502            ds 1
+0002            503   _LCDprint_PARM_2:
+0002            504            ds 1
+0003            505   _LCDprint2_PARM_2:
+0003            506            ds 1
+0004            507   _LCDprint2_PARM_3:
+0004            508            ds 1
+0005            509   _main_v_1_99:
+0005            510            ds 8
+000D            511   _main_vrms_1_99:
+000D            512            ds 8
+0015            513   _main_buffer1_1_99:
+0015            514            ds 10
+001F            515   _main_buffer2_1_99:
+001F            516            ds 20
+0033            517   _main_half_period_1_99:
+0033            518            ds 4
+0037            519   _main_frequency_1_99:
+0037            520            ds 4
+003B            521   _main_sloc0_1_0:
+003B            522            ds 4
+003F            523   ;--------------------------------------------------------
+003F            524   ; overlayable items in internal ram 
+003F            525   ;--------------------------------------------------------
+0000            526            rseg    R_OSEG
+0000            527            rseg    R_OSEG
+0000            528   _InitPinADC_PARM_2:
+0000            529            ds 1
+0001            530            rseg    R_OSEG
+0001            531   ;--------------------------------------------------------
+0001            532   ; indirectly addressable internal ram data
+0001            533   ;--------------------------------------------------------
+0000            534            rseg R_ISEG
+0000            535   ;--------------------------------------------------------
+0000            536   ; absolute internal ram data
+0000            537   ;--------------------------------------------------------
+0000            538            DSEG
+0000            539   ;--------------------------------------------------------
+0000            540   ; bit data
+0000            541   ;--------------------------------------------------------
+0000            542            rseg R_BSEG
+0000            543   _LCDprint_PARM_3:
+0000            544            DBIT    1
+0001            545   ;--------------------------------------------------------
+0001            546   ; paged external ram data
+0001            547   ;--------------------------------------------------------
+0000            548            rseg R_PSEG
+0000            549   ;--------------------------------------------------------
+0000            550   ; external ram data
+0000            551   ;--------------------------------------------------------
+0000            552            rseg R_XSEG
+0000            553   ;--------------------------------------------------------
+0000            554   ; absolute external ram data
+0000            555   ;--------------------------------------------------------
+0000            556            XSEG
+0000            557   ;--------------------------------------------------------
+0000            558   ; external initialized ram data
+0000            559   ;--------------------------------------------------------
+0000            560            rseg R_IXSEG
+0000            561            rseg R_HOME
+0000            562            rseg R_GSINIT
+0000            563            rseg R_CSEG
+0000            564   ;--------------------------------------------------------
+0000            565   ; Reset entry point and interrupt vectors
+0000            566   ;--------------------------------------------------------
+0000            567            CSEG at 0x0000
+0000 020000     568            ljmp    _crt0
+0003            569   ;--------------------------------------------------------
+0003            570   ; global & static initialisations
+0003            571   ;--------------------------------------------------------
+0000            572            rseg R_HOME
+0000            573            rseg R_GSINIT
+0000            574            rseg R_GSINIT
+0000            575   ;--------------------------------------------------------
+0000            576   ; data variables initialization
+0000            577   ;--------------------------------------------------------
+0000            578            rseg R_DINIT
+0000            579            ; The linker places a 'ret' at the end of segment R_DINIT.
+0000            580   ;--------------------------------------------------------
+0000            581   ; code
+0000            582   ;--------------------------------------------------------
+0000            583            rseg R_CSEG
+0000            584   ;------------------------------------------------------------
+0000            585   ;Allocation info for local variables in function '_c51_external_startup'
+0000            586   ;------------------------------------------------------------
+0000            587   ;------------------------------------------------------------
+0000            588   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:33: char _c51_external_startup (void)
+0000            589   ;        -----------------------------------------
+0000            590   ;         function _c51_external_startup
+0000            591   ;        -----------------------------------------
+0000            592   __c51_external_startup:
+0000            593            using   0
+0000            594   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:36: SFRPAGE = 0x00;
+0000 75A700     595            mov     _SFRPAGE,#0x00
+0003            596   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:37: WDTCN = 0xDE; //First key
+0003 7597DE     597            mov     _WDTCN,#0xDE
+0006            598   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:38: WDTCN = 0xAD; //Second key
+0006 7597AD     599            mov     _WDTCN,#0xAD
+0009            600   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:40: VDM0CN=0x80;       // enable VDD monitor
+0009 75FF80     601            mov     _VDM0CN,#0x80
+000C            602   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:41: RSTSRC=0x02|0x04;  // Enable reset on missing clock detector and VDD
+000C 75EF06     603            mov     _RSTSRC,#0x06
+000F            604   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:48: SFRPAGE = 0x10;
+000F 75A710     605            mov     _SFRPAGE,#0x10
+0012            606   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:49: PFE0CN  = 0x20; // SYSCLK < 75 MHz.
+0012 75C120     607            mov     _PFE0CN,#0x20
+0015            608   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:50: SFRPAGE = 0x00;
+0015 75A700     609            mov     _SFRPAGE,#0x00
+0018            610   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:71: CLKSEL = 0x00;
+0018 75A900     611            mov     _CLKSEL,#0x00
+001B            612   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:72: CLKSEL = 0x00;
+001B 75A900     613            mov     _CLKSEL,#0x00
+001E            614   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:73: while ((CLKSEL & 0x80) == 0);
+001E            615   L002001?:
+001E E5A9       616            mov     a,_CLKSEL
+0020 30E7E8     617            jnb     acc.7,L002001?
+0023            618   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:74: CLKSEL = 0x03;
+0023 75A903     619            mov     _CLKSEL,#0x03
+0026            620   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:75: CLKSEL = 0x03;
+0026 75A903     621            mov     _CLKSEL,#0x03
+0029            622   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:76: while ((CLKSEL & 0x80) == 0);
+0029            623   L002004?:
+0029 E5A9       624            mov     a,_CLKSEL
+002B 30E768     625            jnb     acc.7,L002004?
+002E            626   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:81: P0MDOUT |= 0x10; // Enable UART0 TX as push-pull output
+002E 43A410     627            orl     _P0MDOUT,#0x10
+0031            628   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:82: XBR0     = 0x01; // Enable UART0 on P0.4(TX) and P0.5(RX)                     
+0031 75E101     629            mov     _XBR0,#0x01
+0034            630   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:83: XBR1     = 0X00;
+0034 75E200     631            mov     _XBR1,#0x00
+0037            632   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:84: XBR2     = 0x40; // Enable crossbar and weak pull-ups
+0037 75E340     633            mov     _XBR2,#0x40
+003A            634   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:90: SCON0 = 0x10;
+003A 759810     635            mov     _SCON0,#0x10
+003D            636   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:91: TH1 = 0x100-((SYSCLK/BAUDRATE)/(2L*12L));
+003D 758DE6     637            mov     _TH1,#0xE6
+0040            638   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:92: TL1 = TH1;      // Init Timer1
+0040 858D8B     639            mov     _TL1,_TH1
+0043            640   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:93: TMOD &= ~0xf0;  // TMOD: timer 1 in 8-bit auto-reload
+0043 53890F     641            anl     _TMOD,#0x0F
+0046            642   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:94: TMOD |=  0x20;                       
+0046 438920     643            orl     _TMOD,#0x20
+0049            644   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:95: TR1 = 1; // START Timer1
+0049 D28E       645            setb    _TR1
+004B            646   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:96: TI = 1;  // Indicate TX0 ready
+004B D299       647            setb    _TI
+004D            648   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:98: return 0;
+004D 758200     649            mov     dpl,#0x00
+0050 22         650            ret
+0051            651   ;------------------------------------------------------------
+0051            652   ;Allocation info for local variables in function 'InitADC'
+0051            653   ;------------------------------------------------------------
+0051            654   ;------------------------------------------------------------
+0051            655   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:101: void InitADC (void)
+0051            656   ;        -----------------------------------------
+0051            657   ;         function InitADC
+0051            658   ;        -----------------------------------------
+0051            659   _InitADC:
+0051            660   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:103: SFRPAGE = 0x00;
+0051 75A700     661            mov     _SFRPAGE,#0x00
+0054            662   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:104: ADEN=0; // Disable ADC
+0054 C2EF       663            clr     _ADEN
+0056            664   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:109: (0x0 << 0) ; // Accumulate n conversions: 0x0: 1, 0x1:4, 0x2:8, 0x3:16, 0x4:32
+0056 75B280     665            mov     _ADC0CN1,#0x80
+0059            666   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:113: (0x0 << 2); // 0:SYSCLK ADCCLK = SYSCLK. 1:HFOSC0 ADCCLK = HFOSC0.
+0059 75BC20     667            mov     _ADC0CF0,#0x20
+005C            668   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:117: (0x1E << 0); // Conversion Tracking Time. Tadtk = ADTK / (Fsarclk)
+005C 75B91E     669            mov     _ADC0CF1,#0x1E
+005F            670   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:126: (0x0 << 0) ; // TEMPE. 0: Disable the Temperature Sensor. 1: Enable the Temperature Sensor.
+005F 75E800     671            mov     _ADC0CN0,#0x00
+0062            672   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:131: (0x1F << 0); // ADPWR. Power Up Delay Time. Tpwrtime = ((4 * (ADPWR + 1)) + 2) / (Fadcclk)
+0062 75DF3F     673            mov     _ADC0CF2,#0x3F
+0065            674   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:135: (0x0 << 0) ; // ADCM. 0x0: ADBUSY, 0x1: TIMER0, 0x2: TIMER2, 0x3: TIMER3, 0x4: CNVSTR, 0x5: CEX5, 0x6: TIMER4, 0x7: TIMER5, 0x8: CLU0, 0x9: CLU1, 0xA: CLU2, 0xB: CLU3
+0065 75B300     675            mov     _ADC0CN2,#0x00
+0068            676   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:137: ADEN=1; // Enable ADC
+0068 D2EF       677            setb    _ADEN
+006A 22         678            ret
+006B            679   ;------------------------------------------------------------
+006B            680   ;Allocation info for local variables in function 'Timer3us'
+006B            681   ;------------------------------------------------------------
+006B            682   ;us                        Allocated to registers r2 
+006B            683   ;i                         Allocated to registers r3 
+006B            684   ;------------------------------------------------------------
+006B            685   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:141: void Timer3us(unsigned char us)
+006B            686   ;        -----------------------------------------
+006B            687   ;         function Timer3us
+006B            688   ;        -----------------------------------------
+006B            689   _Timer3us:
+006B AA82       690            mov     r2,dpl
+006D            691   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:146: CKCON0|=0b_0100_0000;
+006D 438E40     692            orl     _CKCON0,#0x40
+0070            693   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:148: TMR3RL = (-(SYSCLK)/1000000L); // Set Timer3 to overflow in 1us.
+0070 7592B8     694            mov     _TMR3RL,#0xB8
+0073 7593FF     695            mov     (_TMR3RL >> 8),#0xFF
+0076            696   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:149: TMR3 = TMR3RL;                 // Initialize Timer3 for first overflow
+0076 859294     697            mov     _TMR3,_TMR3RL
+0079 859395     698            mov     (_TMR3 >> 8),(_TMR3RL >> 8)
+007C            699   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:151: TMR3CN0 = 0x04;                 // Sart Timer3 and clear overflow flag
+007C 759104     700            mov     _TMR3CN0,#0x04
+007F            701   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:152: for (i = 0; i < us; i++)       // Count <us> overflows
+007F 7B00       702            mov     r3,#0x00
+0081            703   L004004?:
+0081 C3         704            clr     c
+0082 EB         705            mov     a,r3
+0083 9A         706            subb    a,r2
+0084 5000       707            jnc     L004007?
+0086            708   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:154: while (!(TMR3CN0 & 0x80));  // Wait for overflow
+0086            709   L004001?:
+0086 E591       710            mov     a,_TMR3CN0
+0088 30E768     711            jnb     acc.7,L004001?
+008B            712   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:155: TMR3CN0 &= ~(0x80);         // Clear overflow indicator
+008B 53917F     713            anl     _TMR3CN0,#0x7F
+008E            714   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:152: for (i = 0; i < us; i++)       // Count <us> overflows
+008E 0B         715            inc     r3
+008F 8000       716            sjmp    L004004?
+0091            717   L004007?:
+0091            718   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:157: TMR3CN0 = 0 ;                   // Stop Timer3 and clear overflow flag
+0091 759100     719            mov     _TMR3CN0,#0x00
+0094 22         720            ret
+0095            721   ;------------------------------------------------------------
+0095            722   ;Allocation info for local variables in function 'waitms'
+0095            723   ;------------------------------------------------------------
+0095            724   ;ms                        Allocated to registers r2 r3 
+0095            725   ;j                         Allocated to registers r4 r5 
+0095            726   ;k                         Allocated to registers r6 
+0095            727   ;------------------------------------------------------------
+0095            728   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:160: void waitms (unsigned int ms)
+0095            729   ;        -----------------------------------------
+0095            730   ;         function waitms
+0095            731   ;        -----------------------------------------
+0095            732   _waitms:
+0095 AA82       733            mov     r2,dpl
+0097 AB83       734            mov     r3,dph
+0099            735   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:164: for(j=0; j<ms; j++)
+0099 7C00       736            mov     r4,#0x00
+009B 7D00       737            mov     r5,#0x00
+009D            738   L005005?:
+009D C3         739            clr     c
+009E EC         740            mov     a,r4
+009F 9A         741            subb    a,r2
+00A0 ED         742            mov     a,r5
+00A1 9B         743            subb    a,r3
+00A2 5000       744            jnc     L005009?
+00A4            745   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:165: for (k=0; k<4; k++) Timer3us(250);
+00A4 7E00       746            mov     r6,#0x00
+00A6            747   L005001?:
+00A6 BE04A8     748            cjne    r6,#0x04,L005018?
+00A9            749   L005018?:
+00A9 5000       750            jnc     L005007?
+00AB 7582FA     751            mov     dpl,#0xFA
+00AE C002       752            push    ar2
+00B0 C003       753            push    ar3
+00B2 C004       754            push    ar4
+00B4 C005       755            push    ar5
+00B6 C006       756            push    ar6
+00B8 120000     757            lcall   _Timer3us
+00BB D006       758            pop     ar6
+00BD D005       759            pop     ar5
+00BF D004       760            pop     ar4
+00C1 D003       761            pop     ar3
+00C3 D002       762            pop     ar2
+00C5 0E         763            inc     r6
+00C6 8000       764            sjmp    L005001?
+00C8            765   L005007?:
+00C8            766   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:164: for(j=0; j<ms; j++)
+00C8 0C         767            inc     r4
+00C9 BC00E8     768            cjne    r4,#0x00,L005005?
+00CC 0D         769            inc     r5
+00CD 8000       770            sjmp    L005005?
+00CF            771   L005009?:
+00CF 22         772            ret
+00D0            773   ;------------------------------------------------------------
+00D0            774   ;Allocation info for local variables in function 'TIMER0_Init'
+00D0            775   ;------------------------------------------------------------
+00D0            776   ;------------------------------------------------------------
+00D0            777   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:169: void TIMER0_Init(void)
+00D0            778   ;        -----------------------------------------
+00D0            779   ;         function TIMER0_Init
+00D0            780   ;        -----------------------------------------
+00D0            781   _TIMER0_Init:
+00D0            782   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:171: TMOD&=0b_1111_0000; // Set the bits of Timer/Counter 0 to zero
+00D0 5389F0     783            anl     _TMOD,#0xF0
+00D3            784   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:172: TMOD|=0b_0000_0001; // Timer/Counter 0 used as a 16-bit timer
+00D3 438901     785            orl     _TMOD,#0x01
+00D6            786   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:173: TR0=0; // Stop Timer/Counter 0
+00D6 C28C       787            clr     _TR0
+00D8 22         788            ret
+00D9            789   ;------------------------------------------------------------
+00D9            790   ;Allocation info for local variables in function 'InitPinADC'
+00D9            791   ;------------------------------------------------------------
+00D9            792   ;pinno                     Allocated with name '_InitPinADC_PARM_2'
+00D9            793   ;portno                    Allocated to registers r2 
+00D9            794   ;mask                      Allocated to registers r3 
+00D9            795   ;------------------------------------------------------------
+00D9            796   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:178: void InitPinADC (unsigned char portno, unsigned char pinno)
+00D9            797   ;        -----------------------------------------
+00D9            798   ;         function InitPinADC
+00D9            799   ;        -----------------------------------------
+00D9            800   _InitPinADC:
+00D9 AA82       801            mov     r2,dpl
+00DB            802   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:182: mask=1<<pinno;
+00DB 8560F0     803            mov     b,_InitPinADC_PARM_2
+00DE 05F0       804            inc     b
+00E0 7401       805            mov     a,#0x01
+00E2 8000       806            sjmp    L007013?
+00E4            807   L007011?:
+00E4 25E0       808            add     a,acc
+00E6            809   L007013?:
+00E6 D5F0A8     810            djnz    b,L007011?
+00E9 FB         811            mov     r3,a
+00EA            812   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:184: SFRPAGE = 0x20;
+00EA 75A720     813            mov     _SFRPAGE,#0x20
+00ED            814   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:185: switch (portno)
+00ED BA00E8     815            cjne    r2,#0x00,L007014?
+00F0 8000       816            sjmp    L007001?
+00F2            817   L007014?:
+00F2 BA0168     818            cjne    r2,#0x01,L007015?
+00F5 8000       819            sjmp    L007002?
+00F7            820   L007015?:
+00F7            821   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:187: case 0:
+00F7 BA02E8     822            cjne    r2,#0x02,L007005?
+00FA 8000       823            sjmp    L007003?
+00FC            824   L007001?:
+00FC            825   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:188: P0MDIN &= (~mask); // Set pin as analog input
+00FC EB         826            mov     a,r3
+00FD F4         827            cpl     a
+00FE FA         828            mov     r2,a
+00FF 52F1       829            anl     _P0MDIN,a
+0101            830   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:189: P0SKIP |= mask; // Skip Crossbar decoding for this pin
+0101 EB         831            mov     a,r3
+0102 42D4       832            orl     _P0SKIP,a
+0104            833   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:190: break;
+0104            834   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:191: case 1:
+0104 8000       835            sjmp    L007005?
+0106            836   L007002?:
+0106            837   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:192: P1MDIN &= (~mask); // Set pin as analog input
+0106 EB         838            mov     a,r3
+0107 F4         839            cpl     a
+0108 FA         840            mov     r2,a
+0109 52F2       841            anl     _P1MDIN,a
+010B            842   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:193: P1SKIP |= mask; // Skip Crossbar decoding for this pin
+010B EB         843            mov     a,r3
+010C 42D5       844            orl     _P1SKIP,a
+010E            845   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:194: break;
+010E            846   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:195: case 2:
+010E 8000       847            sjmp    L007005?
+0110            848   L007003?:
+0110            849   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:196: P2MDIN &= (~mask); // Set pin as analog input
+0110 EB         850            mov     a,r3
+0111 F4         851            cpl     a
+0112 FA         852            mov     r2,a
+0113 52F3       853            anl     _P2MDIN,a
+0115            854   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:197: P2SKIP |= mask; // Skip Crossbar decoding for this pin
+0115 EB         855            mov     a,r3
+0116 42CC       856            orl     _P2SKIP,a
+0118            857   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:201: }
+0118            858   L007005?:
+0118            859   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:202: SFRPAGE = 0x00;
+0118 75A700     860            mov     _SFRPAGE,#0x00
+011B 22         861            ret
+011C            862   ;------------------------------------------------------------
+011C            863   ;Allocation info for local variables in function 'ADC_at_Pin'
+011C            864   ;------------------------------------------------------------
+011C            865   ;pin                       Allocated to registers 
+011C            866   ;------------------------------------------------------------
+011C            867   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:205: unsigned int ADC_at_Pin(unsigned char pin)
+011C            868   ;        -----------------------------------------
+011C            869   ;         function ADC_at_Pin
+011C            870   ;        -----------------------------------------
+011C            871   _ADC_at_Pin:
+011C 8582BB     872            mov     _ADC0MX,dpl
+011F            873   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:208: ADINT = 0;
+011F C2ED       874            clr     _ADINT
+0121            875   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:209: ADBUSY = 1;     // Convert voltage at the pin
+0121 D2EC       876            setb    _ADBUSY
+0123            877   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:210: while (!ADINT); // Wait for conversion to complete
+0123            878   L008001?:
+0123 30ED68     879            jnb     _ADINT,L008001?
+0126            880   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:211: return (ADC0);
+0126 85BD82     881            mov     dpl,_ADC0
+0129 85BE83     882            mov     dph,(_ADC0 >> 8)
+012C 22         883            ret
+012D            884   ;------------------------------------------------------------
+012D            885   ;Allocation info for local variables in function 'Volts_at_Pin'
+012D            886   ;------------------------------------------------------------
+012D            887   ;pin                       Allocated to registers r2 
+012D            888   ;------------------------------------------------------------
+012D            889   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:214: float Volts_at_Pin(unsigned char pin)
+012D            890   ;        -----------------------------------------
+012D            891   ;         function Volts_at_Pin
+012D            892   ;        -----------------------------------------
+012D            893   _Volts_at_Pin:
+012D            894   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:216: return ((ADC_at_Pin(pin)*VDD)/0b_0011_1111_1111_1111);
+012D 120000     895            lcall   _ADC_at_Pin
+0130 120000     896            lcall   ___uint2fs
+0133 AA82       897            mov     r2,dpl
+0135 AB83       898            mov     r3,dph
+0137 ACF0       899            mov     r4,b
+0139 FD         900            mov     r5,a
+013A C002       901            push    ar2
+013C C003       902            push    ar3
+013E C004       903            push    ar4
+0140 C005       904            push    ar5
+0142 906C8B     905            mov     dptr,#0x6C8B
+0145 75F053     906            mov     b,#0x53
+0148 7440       907            mov     a,#0x40
+014A 120000     908            lcall   ___fsmul
+014D AA82       909            mov     r2,dpl
+014F AB83       910            mov     r3,dph
+0151 ACF0       911            mov     r4,b
+0153 FD         912            mov     r5,a
+0154 E581       913            mov     a,sp
+0156 24FC       914            add     a,#0xfc
+0158 F581       915            mov     sp,a
+015A E4         916            clr     a
+015B C0E0       917            push    acc
+015D 74FC       918            mov     a,#0xFC
+015F C0E0       919            push    acc
+0161 747F       920            mov     a,#0x7F
+0163 C0E0       921            push    acc
+0165 7446       922            mov     a,#0x46
+0167 C0E0       923            push    acc
+0169 8A82       924            mov     dpl,r2
+016B 8B83       925            mov     dph,r3
+016D 8CF0       926            mov     b,r4
+016F ED         927            mov     a,r5
+0170 120000     928            lcall   ___fsdiv
+0173 AA82       929            mov     r2,dpl
+0175 AB83       930            mov     r3,dph
+0177 ACF0       931            mov     r4,b
+0179 FD         932            mov     r5,a
+017A E581       933            mov     a,sp
+017C 24FC       934            add     a,#0xfc
+017E F581       935            mov     sp,a
+0180 8A82       936            mov     dpl,r2
+0182 8B83       937            mov     dph,r3
+0184 8CF0       938            mov     b,r4
+0186 ED         939            mov     a,r5
+0187 22         940            ret
+0188            941   ;------------------------------------------------------------
+0188            942   ;Allocation info for local variables in function 'LCD_pulse'
+0188            943   ;------------------------------------------------------------
+0188            944   ;------------------------------------------------------------
+0188            945   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:220: void LCD_pulse (void)
+0188            946   ;        -----------------------------------------
+0188            947   ;         function LCD_pulse
+0188            948   ;        -----------------------------------------
+0188            949   _LCD_pulse:
+0188            950   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:222: LCD_E=1;
+0188 D2A0       951            setb    _P2_0
+018A            952   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:223: Timer3us(40);
+018A 758228     953            mov     dpl,#0x28
+018D 120000     954            lcall   _Timer3us
+0190            955   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:224: LCD_E=0;
+0190 C2A0       956            clr     _P2_0
+0192 22         957            ret
+0193            958   ;------------------------------------------------------------
+0193            959   ;Allocation info for local variables in function 'LCD_byte'
+0193            960   ;------------------------------------------------------------
+0193            961   ;x                         Allocated to registers r2 
+0193            962   ;------------------------------------------------------------
+0193            963   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:226: void LCD_byte (unsigned char x)
+0193            964   ;        -----------------------------------------
+0193            965   ;         function LCD_byte
+0193            966   ;        -----------------------------------------
+0193            967   _LCD_byte:
+0193 AA82       968            mov     r2,dpl
+0195            969   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:229: ACC=x; //Send high nible
+0195 8AE0       970            mov     _ACC,r2
+0197            971   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:230: LCD_D7=ACC_7;
+0197 A2E7       972            mov     c,_ACC_7
+0199 9290       973            mov     _P1_0,c
+019B            974   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:231: LCD_D6=ACC_6;
+019B A2E6       975            mov     c,_ACC_6
+019D 9291       976            mov     _P1_1,c
+019F            977   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:232: LCD_D5=ACC_5;
+019F A2E5       978            mov     c,_ACC_5
+01A1 9292       979            mov     _P1_2,c
+01A3            980   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:233: LCD_D4=ACC_4;
+01A3 A2E4       981            mov     c,_ACC_4
+01A5 9293       982            mov     _P1_3,c
+01A7            983   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:234: LCD_pulse();
+01A7 C002       984            push    ar2
+01A9 120000     985            lcall   _LCD_pulse
+01AC            986   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:235: Timer3us(40);
+01AC 758228     987            mov     dpl,#0x28
+01AF 120000     988            lcall   _Timer3us
+01B2 D002       989            pop     ar2
+01B4            990   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:236: ACC=x; //Send low nible
+01B4 8AE0       991            mov     _ACC,r2
+01B6            992   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:237: LCD_D7=ACC_3;
+01B6 A2E3       993            mov     c,_ACC_3
+01B8 9290       994            mov     _P1_0,c
+01BA            995   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:238: LCD_D6=ACC_2;
+01BA A2E2       996            mov     c,_ACC_2
+01BC 9291       997            mov     _P1_1,c
+01BE            998   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:239: LCD_D5=ACC_1;
+01BE A2E1       999            mov     c,_ACC_1
+01C0 9292      1000            mov     _P1_2,c
+01C2           1001   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:240: LCD_D4=ACC_0;
+01C2 A2E0      1002            mov     c,_ACC_0
+01C4 9293      1003            mov     _P1_3,c
+01C6           1004   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:241: LCD_pulse();
+01C6 020000    1005            ljmp    _LCD_pulse
+01C9           1006   ;------------------------------------------------------------
+01C9           1007   ;Allocation info for local variables in function 'WriteData'
+01C9           1008   ;------------------------------------------------------------
+01C9           1009   ;x                         Allocated to registers r2 
+01C9           1010   ;------------------------------------------------------------
+01C9           1011   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:244: void WriteData (unsigned char x)
+01C9           1012   ;        -----------------------------------------
+01C9           1013   ;         function WriteData
+01C9           1014   ;        -----------------------------------------
+01C9           1015   _WriteData:
+01C9 AA82      1016            mov     r2,dpl
+01CB           1017   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:246: LCD_RS=1;
+01CB D297      1018            setb    _P1_7
+01CD           1019   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:247: LCD_byte(x);
+01CD 8A82      1020            mov     dpl,r2
+01CF 120000    1021            lcall   _LCD_byte
+01D2           1022   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:248: waitms(2);
+01D2 900002    1023            mov     dptr,#0x0002
+01D5 020000    1024            ljmp    _waitms
+01D8           1025   ;------------------------------------------------------------
+01D8           1026   ;Allocation info for local variables in function 'WriteCommand'
+01D8           1027   ;------------------------------------------------------------
+01D8           1028   ;x                         Allocated to registers r2 
+01D8           1029   ;------------------------------------------------------------
+01D8           1030   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:251: void WriteCommand (unsigned char x)
+01D8           1031   ;        -----------------------------------------
+01D8           1032   ;         function WriteCommand
+01D8           1033   ;        -----------------------------------------
+01D8           1034   _WriteCommand:
+01D8 AA82      1035            mov     r2,dpl
+01DA           1036   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:253: LCD_RS=0;
+01DA C297      1037            clr     _P1_7
+01DC           1038   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:254: LCD_byte(x);
+01DC 8A82      1039            mov     dpl,r2
+01DE 120000    1040            lcall   _LCD_byte
+01E1           1041   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:255: waitms(5);
+01E1 900005    1042            mov     dptr,#0x0005
+01E4 020000    1043            ljmp    _waitms
+01E7           1044   ;------------------------------------------------------------
+01E7           1045   ;Allocation info for local variables in function 'LCD_4BIT'
+01E7           1046   ;------------------------------------------------------------
+01E7           1047   ;------------------------------------------------------------
+01E7           1048   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:258: void LCD_4BIT (void)
+01E7           1049   ;        -----------------------------------------
+01E7           1050   ;         function LCD_4BIT
+01E7           1051   ;        -----------------------------------------
+01E7           1052   _LCD_4BIT:
+01E7           1053   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:260: LCD_E=0; // Resting state of LCD's enable is zero
+01E7 C2A0      1054            clr     _P2_0
+01E9           1055   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:262: waitms(20);
+01E9 900014    1056            mov     dptr,#0x0014
+01EC 120000    1057            lcall   _waitms
+01EF           1058   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:264: WriteCommand(0x33);
+01EF 758233    1059            mov     dpl,#0x33
+01F2 120000    1060            lcall   _WriteCommand
+01F5           1061   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:265: WriteCommand(0x33);
+01F5 758233    1062            mov     dpl,#0x33
+01F8 120000    1063            lcall   _WriteCommand
+01FB           1064   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:266: WriteCommand(0x32); // Change to 4-bit mode
+01FB 758232    1065            mov     dpl,#0x32
+01FE 120000    1066            lcall   _WriteCommand
+0201           1067   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:269: WriteCommand(0x28);
+0201 758228    1068            mov     dpl,#0x28
+0204 120000    1069            lcall   _WriteCommand
+0207           1070   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:270: WriteCommand(0x0c);
+0207 75820C    1071            mov     dpl,#0x0C
+020A 120000    1072            lcall   _WriteCommand
+020D           1073   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:271: WriteCommand(0x01); // Clear screen command (takes some time)
+020D 758201    1074            mov     dpl,#0x01
+0210 120000    1075            lcall   _WriteCommand
+0213           1076   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:272: waitms(20); // Wait for clear screen command to finsih.
+0213 900014    1077            mov     dptr,#0x0014
+0216 020000    1078            ljmp    _waitms
+0219           1079   ;------------------------------------------------------------
+0219           1080   ;Allocation info for local variables in function 'LCDprint'
+0219           1081   ;------------------------------------------------------------
+0219           1082   ;line                      Allocated with name '_LCDprint_PARM_2'
+0219           1083   ;string                    Allocated to registers r2 r3 r4 
+0219           1084   ;j                         Allocated to registers r5 r6 
+0219           1085   ;------------------------------------------------------------
+0219           1086   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:275: void LCDprint(char * string, unsigned char line, bit clear)
+0219           1087   ;        -----------------------------------------
+0219           1088   ;         function LCDprint
+0219           1089   ;        -----------------------------------------
+0219           1090   _LCDprint:
+0219 AA82      1091            mov     r2,dpl
+021B AB83      1092            mov     r3,dph
+021D ACF0      1093            mov     r4,b
+021F           1094   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:279: WriteCommand(line==2?0xc0:0x80);
+021F 7402      1095            mov     a,#0x02
+0221 B5F0A8    1096            cjne    a,_LCDprint_PARM_2,L015013?
+0224 7DC0      1097            mov     r5,#0xC0
+0226 8000      1098            sjmp    L015014?
+0228           1099   L015013?:
+0228 7D80      1100            mov     r5,#0x80
+022A           1101   L015014?:
+022A 8D82      1102            mov     dpl,r5
+022C C002      1103            push    ar2
+022E C003      1104            push    ar3
+0230 C004      1105            push    ar4
+0232 120000    1106            lcall   _WriteCommand
+0235           1107   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:280: waitms(5);
+0235 900005    1108            mov     dptr,#0x0005
+0238 120000    1109            lcall   _waitms
+023B D004      1110            pop     ar4
+023D D003      1111            pop     ar3
+023F D002      1112            pop     ar2
+0241           1113   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:281: for(j=0; string[j]!=0; j++)  WriteData(string[j]);// Write the message
+0241 7D00      1114            mov     r5,#0x00
+0243 7E00      1115            mov     r6,#0x00
+0245           1116   L015003?:
+0245 ED        1117            mov     a,r5
+0246 2A        1118            add     a,r2
+0247 FF        1119            mov     r7,a
+0248 EE        1120            mov     a,r6
+0249 3B        1121            addc    a,r3
+024A F8        1122            mov     r0,a
+024B 8C01      1123            mov     ar1,r4
+024D 8F82      1124            mov     dpl,r7
+024F 8883      1125            mov     dph,r0
+0251 89F0      1126            mov     b,r1
+0253 120000    1127            lcall   __gptrget
+0256 FF        1128            mov     r7,a
+0257 6000      1129            jz      L015006?
+0259 8F82      1130            mov     dpl,r7
+025B C002      1131            push    ar2
+025D C003      1132            push    ar3
+025F C004      1133            push    ar4
+0261 C005      1134            push    ar5
+0263 C006      1135            push    ar6
+0265 120000    1136            lcall   _WriteData
+0268 D006      1137            pop     ar6
+026A D005      1138            pop     ar5
+026C D004      1139            pop     ar4
+026E D003      1140            pop     ar3
+0270 D002      1141            pop     ar2
+0272 0D        1142            inc     r5
+0273 BD0028    1143            cjne    r5,#0x00,L015003?
+0276 0E        1144            inc     r6
+0277 8000      1145            sjmp    L015003?
+0279           1146   L015006?:
+0279           1147   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:282: if(clear) for(; j<CHARS_PER_LINE; j++) WriteData(' '); // Clear the rest of the line
+0279 3000E8    1148            jnb     _LCDprint_PARM_3,L015011?
+027C 8D02      1149            mov     ar2,r5
+027E 8E03      1150            mov     ar3,r6
+0280           1151   L015007?:
+0280 C3        1152            clr     c
+0281 EA        1153            mov     a,r2
+0282 9410      1154            subb    a,#0x10
+0284 EB        1155            mov     a,r3
+0285 6480      1156            xrl     a,#0x80
+0287 9480      1157            subb    a,#0x80
+0289 5000      1158            jnc     L015011?
+028B 758220    1159            mov     dpl,#0x20
+028E C002      1160            push    ar2
+0290 C003      1161            push    ar3
+0292 120000    1162            lcall   _WriteData
+0295 D003      1163            pop     ar3
+0297 D002      1164            pop     ar2
+0299 0A        1165            inc     r2
+029A BA0028    1166            cjne    r2,#0x00,L015007?
+029D 0B        1167            inc     r3
+029E 8000      1168            sjmp    L015007?
+02A0           1169   L015011?:
+02A0 22        1170            ret
+02A1           1171   ;------------------------------------------------------------
+02A1           1172   ;Allocation info for local variables in function 'LCDprint2'
+02A1           1173   ;------------------------------------------------------------
+02A1           1174   ;line                      Allocated with name '_LCDprint2_PARM_2'
+02A1           1175   ;col                       Allocated with name '_LCDprint2_PARM_3'
+02A1           1176   ;string                    Allocated to registers r2 r3 r4 
+02A1           1177   ;j                         Allocated to registers r5 r6 
+02A1           1178   ;------------------------------------------------------------
+02A1           1179   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:284: void LCDprint2(char * string, unsigned char line, unsigned char col)
+02A1           1180   ;        -----------------------------------------
+02A1           1181   ;         function LCDprint2
+02A1           1182   ;        -----------------------------------------
+02A1           1183   _LCDprint2:
+02A1 AA82      1184            mov     r2,dpl
+02A3 AB83      1185            mov     r3,dph
+02A5 ACF0      1186            mov     r4,b
+02A7           1187   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:288: WriteCommand(line==2?0xc0|col:0x80|col); // Move cursor to line and column
+02A7 7402      1188            mov     a,#0x02
+02A9 B5A068    1189            cjne    a,_LCDprint2_PARM_2,L016007?
+02AC 74C0      1190            mov     a,#0xC0
+02AE 4550      1191            orl     a,_LCDprint2_PARM_3
+02B0 FD        1192            mov     r5,a
+02B1 8000      1193            sjmp    L016008?
+02B3           1194   L016007?:
+02B3 7480      1195            mov     a,#0x80
+02B5 4550      1196            orl     a,_LCDprint2_PARM_3
+02B7 FD        1197            mov     r5,a
+02B8           1198   L016008?:
+02B8 8D82      1199            mov     dpl,r5
+02BA C002      1200            push    ar2
+02BC C003      1201            push    ar3
+02BE C004      1202            push    ar4
+02C0 120000    1203            lcall   _WriteCommand
+02C3 D004      1204            pop     ar4
+02C5 D003      1205            pop     ar3
+02C7 D002      1206            pop     ar2
+02C9           1207   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:289: for(j=0; string[j]!=0; j++) WriteData(string[j]); // Write the message
+02C9 7D00      1208            mov     r5,#0x00
+02CB 7E00      1209            mov     r6,#0x00
+02CD           1210   L016001?:
+02CD ED        1211            mov     a,r5
+02CE 2A        1212            add     a,r2
+02CF FF        1213            mov     r7,a
+02D0 EE        1214            mov     a,r6
+02D1 3B        1215            addc    a,r3
+02D2 F8        1216            mov     r0,a
+02D3 8C01      1217            mov     ar1,r4
+02D5 8F82      1218            mov     dpl,r7
+02D7 8883      1219            mov     dph,r0
+02D9 89F0      1220            mov     b,r1
+02DB 120000    1221            lcall   __gptrget
+02DE FF        1222            mov     r7,a
+02DF 6000      1223            jz      L016005?
+02E1 8F82      1224            mov     dpl,r7
+02E3 C002      1225            push    ar2
+02E5 C003      1226            push    ar3
+02E7 C004      1227            push    ar4
+02E9 C005      1228            push    ar5
+02EB C006      1229            push    ar6
+02ED 120000    1230            lcall   _WriteData
+02F0 D006      1231            pop     ar6
+02F2 D005      1232            pop     ar5
+02F4 D004      1233            pop     ar4
+02F6 D003      1234            pop     ar3
+02F8 D002      1235            pop     ar2
+02FA 0D        1236            inc     r5
+02FB BD00E8    1237            cjne    r5,#0x00,L016001?
+02FE 0E        1238            inc     r6
+02FF 8000      1239            sjmp    L016001?
+0301           1240   L016005?:
+0301 22        1241            ret
+0302           1242   ;------------------------------------------------------------
+0302           1243   ;Allocation info for local variables in function 'Get_ADC'
+0302           1244   ;------------------------------------------------------------
+0302           1245   ;------------------------------------------------------------
+0302           1246   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:295: unsigned int Get_ADC (void)
+0302           1247   ;        -----------------------------------------
+0302           1248   ;         function Get_ADC
+0302           1249   ;        -----------------------------------------
+0302           1250   _Get_ADC:
+0302           1251   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:297: ADINT = 0;
+0302 C2ED      1252            clr     _ADINT
+0304           1253   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:298: ADBUSY = 1;
+0304 D2EC      1254            setb    _ADBUSY
+0306           1255   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:299: while (!ADINT); // Wait for conversion to complete
+0306           1256   L017001?:
+0306 30ED68    1257            jnb     _ADINT,L017001?
+0309           1258   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:300: return (ADC0);
+0309 85BD82    1259            mov     dpl,_ADC0
+030C 85BE83    1260            mov     dph,(_ADC0 >> 8)
+030F 22        1261            ret
+0310           1262   ;------------------------------------------------------------
+0310           1263   ;Allocation info for local variables in function 'main'
+0310           1264   ;------------------------------------------------------------
+0310           1265   ;v                         Allocated with name '_main_v_1_99'
+0310           1266   ;vrms                      Allocated with name '_main_vrms_1_99'
+0310           1267   ;buffer1                   Allocated with name '_main_buffer1_1_99'
+0310           1268   ;buffer2                   Allocated with name '_main_buffer2_1_99'
+0310           1269   ;half_period               Allocated with name '_main_half_period_1_99'
+0310           1270   ;period                    Allocated to registers r2 r3 r4 r5 
+0310           1271   ;frequency                 Allocated with name '_main_frequency_1_99'
+0310           1272   ;phase_diff_t              Allocated to registers r2 r3 r4 r5 
+0310           1273   ;phase_diff                Allocated to registers r2 r3 r4 r5 
+0310           1274   ;phase_diff_angle          Allocated to registers r2 r3 r4 r5 
+0310           1275   ;number                    Allocated to registers 
+0310           1276   ;sloc0                     Allocated with name '_main_sloc0_1_0'
+0310           1277   ;------------------------------------------------------------
+0310           1278   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:304: void main (void)
+0310           1279   ;        -----------------------------------------
+0310           1280   ;         function main
+0310           1281   ;        -----------------------------------------
+0310           1282   _main:
+0310           1283   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:321: LCD_4BIT();
+0310 120000    1284            lcall   _LCD_4BIT
+0313           1285   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:322: TIMER0_Init();
+0313 120000    1286            lcall   _TIMER0_Init
+0316           1287   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:324: waitms(500); // Give PuTTy a chance to start before sending
+0316 9001F4    1288            mov     dptr,#0x01F4
+0319 120000    1289            lcall   _waitms
+031C           1290   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:325: printf("\x1b[2J"); // Clear screen using ANSI escape sequence.
+031C 74A8      1291            mov     a,#__str_0
+031E C0E0      1292            push    acc
+0320 74C1      1293            mov     a,#(__str_0 >> 8)
+0322 C0E0      1294            push    acc
+0324 7480      1295            mov     a,#0x80
+0326 C0E0      1296            push    acc
+0328 120000    1297            lcall   _printf
+032B 1581      1298            dec     sp
+032D 1581      1299            dec     sp
+032F 1581      1300            dec     sp
+0331           1301   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:330: __FILE__, __DATE__, __TIME__);
+0331           1302   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:329: "Compiled: %s, %s\n\n",
+0331 7428      1303            mov     a,#__str_4
+0333 C0E0      1304            push    acc
+0335 74C2      1305            mov     a,#(__str_4 >> 8)
+0337 C0E0      1306            push    acc
+0339 7480      1307            mov     a,#0x80
+033B C0E0      1308            push    acc
+033D 7468      1309            mov     a,#__str_3
+033F C0E0      1310            push    acc
+0341 74C2      1311            mov     a,#(__str_3 >> 8)
+0343 C0E0      1312            push    acc
+0345 7480      1313            mov     a,#0x80
+0347 C0E0      1314            push    acc
+0349 74A8      1315            mov     a,#__str_2
+034B C0E0      1316            push    acc
+034D 74C2      1317            mov     a,#(__str_2 >> 8)
+034F C0E0      1318            push    acc
+0351 7480      1319            mov     a,#0x80
+0353 C0E0      1320            push    acc
+0355 74E8      1321            mov     a,#__str_1
+0357 C0E0      1322            push    acc
+0359 74C2      1323            mov     a,#(__str_1 >> 8)
+035B C0E0      1324            push    acc
+035D 7480      1325            mov     a,#0x80
+035F C0E0      1326            push    acc
+0361 120000    1327            lcall   _printf
+0364 E581      1328            mov     a,sp
+0366 24F4      1329            add     a,#0xf4
+0368 F581      1330            mov     sp,a
+036A           1331   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:332: InitPinADC(2, 2); // Configure P2.2 as analog input
+036A 756002    1332            mov     _InitPinADC_PARM_2,#0x02
+036D 758202    1333            mov     dpl,#0x02
+0370 120000    1334            lcall   _InitPinADC
+0373           1335   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:333: InitPinADC(2, 3); // Configure P2.3 as analog input
+0373 756003    1336            mov     _InitPinADC_PARM_2,#0x03
+0376 758202    1337            mov     dpl,#0x02
+0379 120000    1338            lcall   _InitPinADC
+037C           1339   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:334: InitPinADC(2, 4); // Configure P2.4 as analog input
+037C 756004    1340            mov     _InitPinADC_PARM_2,#0x04
+037F 758202    1341            mov     dpl,#0x02
+0382 120000    1342            lcall   _InitPinADC
+0385           1343   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:335: InitPinADC(2, 5); // Configure P2.5 as analog input
+0385 756005    1344            mov     _InitPinADC_PARM_2,#0x05
+0388 758202    1345            mov     dpl,#0x02
+038B 120000    1346            lcall   _InitPinADC
+038E           1347   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:336: InitPinADC(0, 1); // for reference wave period
+038E 756001    1348            mov     _InitPinADC_PARM_2,#0x01
+0391 758200    1349            mov     dpl,#0x00
+0394 120000    1350            lcall   _InitPinADC
+0397           1351   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:337: InitPinADC(0, 6); // for test wave period
+0397 756006    1352            mov     _InitPinADC_PARM_2,#0x06
+039A 758200    1353            mov     dpl,#0x00
+039D 120000    1354            lcall   _InitPinADC
+03A0           1355   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:338: InitADC();
+03A0 120000    1356            lcall   _InitADC
+03A3           1357   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:341: while(1)
+03A3           1358   L018035?:
+03A3           1359   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:347: TL0=0;
+03A3 758A00    1360            mov     _TL0,#0x00
+03A6           1361   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:348: TH0=0;
+03A6 758C00    1362            mov     _TH0,#0x00
+03A9           1363   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:349: while (ADC_at_Pin(QFP32_MUX_P0_1)!=0); // Wait for the signal to be zero
+03A9           1364   L018001?:
+03A9 758200    1365            mov     dpl,#0x00
+03AC 120000    1366            lcall   _ADC_at_Pin
+03AF E582      1367            mov     a,dpl
+03B1 8583F0    1368            mov     b,dph
+03B4 45F0      1369            orl     a,b
+03B6 7000      1370            jnz     L018001?
+03B8           1371   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:350: while (ADC_at_Pin(QFP32_MUX_P0_1)==0); // Wait for the signal to be positive
+03B8           1372   L018004?:
+03B8 758200    1373            mov     dpl,#0x00
+03BB 120000    1374            lcall   _ADC_at_Pin
+03BE E582      1375            mov     a,dpl
+03C0 8583F0    1376            mov     b,dph
+03C3 45F0      1377            orl     a,b
+03C5 6000      1378            jz      L018004?
+03C7           1379   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:351: TR0=1; // Start the timer 0
+03C7 D28C      1380            setb    _TR0
+03C9           1381   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:352: while (ADC_at_Pin(QFP32_MUX_P0_1)!=0); // Wait for the signal to be zero again               
+03C9           1382   L018007?:
+03C9 758200    1383            mov     dpl,#0x00
+03CC 120000    1384            lcall   _ADC_at_Pin
+03CF E582      1385            mov     a,dpl
+03D1 8583F0    1386            mov     b,dph
+03D4 45F0      1387            orl     a,b
+03D6 7000      1388            jnz     L018007?
+03D8           1389   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:353: TR0=0;
+03D8 C28C      1390            clr     _TR0
+03DA           1391   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:354: half_period=TH0*256.0+TL0; // The 16-bit number [TH0-TL0]
+03DA 858C82    1392            mov     dpl,_TH0
+03DD 120000    1393            lcall   ___uchar2fs
+03E0 AA82      1394            mov     r2,dpl
+03E2 AB83      1395            mov     r3,dph
+03E4 ACF0      1396            mov     r4,b
+03E6 FD        1397            mov     r5,a
+03E7 C002      1398            push    ar2
+03E9 C003      1399            push    ar3
+03EB C004      1400            push    ar4
+03ED C005      1401            push    ar5
+03EF 900000    1402            mov     dptr,#0x0000
+03F2 75F080    1403            mov     b,#0x80
+03F5 7443      1404            mov     a,#0x43
+03F7 120000    1405            lcall   ___fsmul
+03FA 858268    1406            mov     _main_sloc0_1_0,dpl
+03FD 858369    1407            mov     (_main_sloc0_1_0 + 1),dph
+0400 85F06A    1408            mov     (_main_sloc0_1_0 + 2),b
+0403 F56B      1409            mov     (_main_sloc0_1_0 + 3),a
+0405 E581      1410            mov     a,sp
+0407 24FC      1411            add     a,#0xfc
+0409 F581      1412            mov     sp,a
+040B AE8A      1413            mov     r6,_TL0
+040D 7F00      1414            mov     r7,#0x00
+040F 8E82      1415            mov     dpl,r6
+0411 8F83      1416            mov     dph,r7
+0413 120000    1417            lcall   ___sint2fs
+0416 AE82      1418            mov     r6,dpl
+0418 AF83      1419            mov     r7,dph
+041A AAF0      1420            mov     r2,b
+041C FB        1421            mov     r3,a
+041D C006      1422            push    ar6
+041F C007      1423            push    ar7
+0421 C002      1424            push    ar2
+0423 C003      1425            push    ar3
+0425 856882    1426            mov     dpl,_main_sloc0_1_0
+0428 856983    1427            mov     dph,(_main_sloc0_1_0 + 1)
+042B 856AF0    1428            mov     b,(_main_sloc0_1_0 + 2)
+042E E56B      1429            mov     a,(_main_sloc0_1_0 + 3)
+0430 120000    1430            lcall   ___fsadd
+0433 8582D8    1431            mov     _main_half_period_1_99,dpl
+0436 8583D9    1432            mov     (_main_half_period_1_99 + 1),dph
+0439 85F0DA    1433            mov     (_main_half_period_1_99 + 2),b
+043C F5DB      1434            mov     (_main_half_period_1_99 + 3),a
+043E E581      1435            mov     a,sp
+0440 24FC      1436            add     a,#0xfc
+0442 F581      1437            mov     sp,a
+0444           1438   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:355: overflow_count1=65536-(half_period/2);// Time from the beginning of the sine wave to its peak
+0444 E4        1439            clr     a
+0445 C0E0      1440            push    acc
+0447 C0E0      1441            push    acc
+0449 C0E0      1442            push    acc
+044B 7440      1443            mov     a,#0x40
+044D C0E0      1444            push    acc
+044F 85D882    1445            mov     dpl,_main_half_period_1_99
+0452 85D983    1446            mov     dph,(_main_half_period_1_99 + 1)
+0455 85DAF0    1447            mov     b,(_main_half_period_1_99 + 2)
+0458 E5DB      1448            mov     a,(_main_half_period_1_99 + 3)
+045A 120000    1449            lcall   ___fsdiv
+045D AE82      1450            mov     r6,dpl
+045F AF83      1451            mov     r7,dph
+0461 AAF0      1452            mov     r2,b
+0463 FB        1453            mov     r3,a
+0464 E581      1454            mov     a,sp
+0466 24FC      1455            add     a,#0xfc
+0468 F581      1456            mov     sp,a
+046A EB        1457            mov     a,r3
+046B B2E7      1458            cpl     acc.7
+046D 8E82      1459            mov     dpl,r6
+046F 8F83      1460            mov     dph,r7
+0471 8AF0      1461            mov     b,r2
+0473 120000    1462            lcall   ___fs2uchar
+0476 858290    1463            mov     _overflow_count1,dpl
+0479           1464   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:356: period=half_period*2.0*(12.0/SYSCLK);
+0479 C0D8      1465            push    _main_half_period_1_99
+047B C0D9      1466            push    (_main_half_period_1_99 + 1)
+047D C0DA      1467            push    (_main_half_period_1_99 + 2)
+047F C0DB      1468            push    (_main_half_period_1_99 + 3)
+0481 90F4FC    1469            mov     dptr,#0xF4FC
+0484 75F0B2    1470            mov     b,#0xB2
+0487 7434      1471            mov     a,#0x34
+0489 120000    1472            lcall   ___fsmul
+048C AA82      1473            mov     r2,dpl
+048E AB83      1474            mov     r3,dph
+0490 ACF0      1475            mov     r4,b
+0492 FD        1476            mov     r5,a
+0493 E581      1477            mov     a,sp
+0495 24FC      1478            add     a,#0xfc
+0497 F581      1479            mov     sp,a
+0499           1480   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:357: frequency=1.0/period;
+0499 C002      1481            push    ar2
+049B C003      1482            push    ar3
+049D C004      1483            push    ar4
+049F C005      1484            push    ar5
+04A1 C002      1485            push    ar2
+04A3 C003      1486            push    ar3
+04A5 C004      1487            push    ar4
+04A7 C005      1488            push    ar5
+04A9 900000    1489            mov     dptr,#0x0000
+04AC 75F080    1490            mov     b,#0x80
+04AF 743F      1491            mov     a,#0x3F
+04B1 120000    1492            lcall   ___fsdiv
+04B4 858228    1493            mov     _main_frequency_1_99,dpl
+04B7 858329    1494            mov     (_main_frequency_1_99 + 1),dph
+04BA 85F02A    1495            mov     (_main_frequency_1_99 + 2),b
+04BD F52B      1496            mov     (_main_frequency_1_99 + 3),a
+04BF E581      1497            mov     a,sp
+04C1 24FC      1498            add     a,#0xfc
+04C3 F581      1499            mov     sp,a
+04C5           1500   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:358: sprintf(buffer1,"%.1f",frequency);
+04C5 C028      1501            push    _main_frequency_1_99
+04C7 C029      1502            push    (_main_frequency_1_99 + 1)
+04C9 C02A      1503            push    (_main_frequency_1_99 + 2)
+04CB C02B      1504            push    (_main_frequency_1_99 + 3)
+04CD 7428      1505            mov     a,#__str_5
+04CF C0E0      1506            push    acc
+04D1 74C5      1507            mov     a,#(__str_5 >> 8)
+04D3 C0E0      1508            push    acc
+04D5 7480      1509            mov     a,#0x80
+04D7 C0E0      1510            push    acc
+04D9 7438      1511            mov     a,#_main_buffer1_1_99
+04DB C0E0      1512            push    acc
+04DD 74B6      1513            mov     a,#(_main_buffer1_1_99 >> 8)
+04DF C0E0      1514            push    acc
+04E1 7440      1515            mov     a,#0x40
+04E3 C0E0      1516            push    acc
+04E5 120000    1517            lcall   _sprintf
+04E8 E581      1518            mov     a,sp
+04EA 24F6      1519            add     a,#0xf6
+04EC F581      1520            mov     sp,a
+04EE           1521   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:359: LCDprint(buffer1,1,1);
+04EE 75F001    1522            mov     _LCDprint_PARM_2,#0x01
+04F1 D200      1523            setb    _LCDprint_PARM_3
+04F3 90B638    1524            mov     dptr,#_main_buffer1_1_99
+04F6 75F040    1525            mov     b,#0x40
+04F9 120000    1526            lcall   _LCDprint
+04FC D005      1527            pop     ar5
+04FE D004      1528            pop     ar4
+0500 D003      1529            pop     ar3
+0502 D002      1530            pop     ar2
+0504           1531   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:362: while (ADC_at_Pin(QFP32_MUX_P0_1)!=0); 
+0504           1532   L018010?:
+0504 758200    1533            mov     dpl,#0x00
+0507 C002      1534            push    ar2
+0509 C003      1535            push    ar3
+050B C004      1536            push    ar4
+050D C005      1537            push    ar5
+050F 120000    1538            lcall   _ADC_at_Pin
+0512 E582      1539            mov     a,dpl
+0514 8583F0    1540            mov     b,dph
+0517 D005      1541            pop     ar5
+0519 D004      1542            pop     ar4
+051B D003      1543            pop     ar3
+051D D002      1544            pop     ar2
+051F 45F0      1545            orl     a,b
+0521 7000      1546            jnz     L018010?
+0523           1547   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:363: while (ADC_at_Pin(QFP32_MUX_P0_1)==0);
+0523           1548   L018013?:
+0523 758200    1549            mov     dpl,#0x00
+0526 C002      1550            push    ar2
+0528 C003      1551            push    ar3
+052A C004      1552            push    ar4
+052C C005      1553            push    ar5
+052E 120000    1554            lcall   _ADC_at_Pin
+0531 E582      1555            mov     a,dpl
+0533 8583F0    1556            mov     b,dph
+0536 D005      1557            pop     ar5
+0538 D004      1558            pop     ar4
+053A D003      1559            pop     ar3
+053C D002      1560            pop     ar2
+053E 45F0      1561            orl     a,b
+0540 6000      1562            jz      L018013?
+0542           1563   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:364: waitms(period*1000/4);
+0542 C002      1564            push    ar2
+0544 C003      1565            push    ar3
+0546 C004      1566            push    ar4
+0548 C005      1567            push    ar5
+054A 900000    1568            mov     dptr,#0x0000
+054D 75F07A    1569            mov     b,#0x7A
+0550 7444      1570            mov     a,#0x44
+0552 120000    1571            lcall   ___fsmul
+0555 AA82      1572            mov     r2,dpl
+0557 AB83      1573            mov     r3,dph
+0559 ACF0      1574            mov     r4,b
+055B FD        1575            mov     r5,a
+055C E581      1576            mov     a,sp
+055E 24FC      1577            add     a,#0xfc
+0560 F581      1578            mov     sp,a
+0562 E4        1579            clr     a
+0563 C0E0      1580            push    acc
+0565 C0E0      1581            push    acc
+0567 7480      1582            mov     a,#0x80
+0569 C0E0      1583            push    acc
+056B 7440      1584            mov     a,#0x40
+056D C0E0      1585            push    acc
+056F 8A82      1586            mov     dpl,r2
+0571 8B83      1587            mov     dph,r3
+0573 8CF0      1588            mov     b,r4
+0575 ED        1589            mov     a,r5
+0576 120000    1590            lcall   ___fsdiv
+0579 AA82      1591            mov     r2,dpl
+057B AB83      1592            mov     r3,dph
+057D ACF0      1593            mov     r4,b
+057F FD        1594            mov     r5,a
+0580 E581      1595            mov     a,sp
+0582 24FC      1596            add     a,#0xfc
+0584 F581      1597            mov     sp,a
+0586 8A82      1598            mov     dpl,r2
+0588 8B83      1599            mov     dph,r3
+058A 8CF0      1600            mov     b,r4
+058C ED        1601            mov     a,r5
+058D 120000    1602            lcall   ___fs2uint
+0590 AA82      1603            mov     r2,dpl
+0592 AB83      1604            mov  r3,dph
+0594 C002      1605            push    ar2
+0596 C003      1606            push    ar3
+0598 120000    1607            lcall   _waitms
+059B           1608   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:365: v[0]=Volts_at_Pin(QFP32_MUX_P0_1);
+059B 758200    1609            mov     dpl,#0x00
+059E 120000    1610            lcall   _Volts_at_Pin
+05A1 AC82      1611            mov     r4,dpl
+05A3 AD83      1612            mov     r5,dph
+05A5 AEF0      1613            mov     r6,b
+05A7 FF        1614            mov     r7,a
+05A8 D003      1615            pop     ar3
+05AA D002      1616            pop     ar2
+05AC 8CA8      1617            mov     _main_v_1_99,r4
+05AE 8DA9      1618            mov     (_main_v_1_99 + 1),r5
+05B0 8EAA      1619            mov     (_main_v_1_99 + 2),r6
+05B2 8FAB      1620            mov     (_main_v_1_99 + 3),r7
+05B4           1621   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:369: while (ADC_at_Pin(QFP32_MUX_P0_6)!=0); 
+05B4           1622   L018016?:
+05B4 758204    1623            mov     dpl,#0x04
+05B7 C002      1624            push    ar2
+05B9 C003      1625            push    ar3
+05BB 120000    1626            lcall   _ADC_at_Pin
+05BE E582      1627            mov     a,dpl
+05C0 8583F0    1628            mov     b,dph
+05C3 D003      1629            pop     ar3
+05C5 D002      1630            pop     ar2
+05C7 45F0      1631            orl     a,b
+05C9 7000      1632            jnz     L018016?
+05CB           1633   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:370: while (ADC_at_Pin(QFP32_MUX_P0_6)==0);
+05CB           1634   L018019?:
+05CB 758204    1635            mov     dpl,#0x04
+05CE C002      1636            push    ar2
+05D0 C003      1637            push    ar3
+05D2 120000    1638            lcall   _ADC_at_Pin
+05D5 E582      1639            mov     a,dpl
+05D7 8583F0    1640            mov     b,dph
+05DA D003      1641            pop     ar3
+05DC D002      1642            pop     ar2
+05DE 45F0      1643            orl     a,b
+05E0 6000      1644            jz      L018019?
+05E2           1645   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:371: waitms(period*1000/4);
+05E2 8A82      1646            mov     dpl,r2
+05E4 8B83      1647            mov     dph,r3
+05E6 120000    1648            lcall   _waitms
+05E9           1649   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:372: v[1]=Volts_at_Pin(QFP32_MUX_P0_6);
+05E9 758204    1650            mov     dpl,#0x04
+05EC 120000    1651            lcall   _Volts_at_Pin
+05EF 858268    1652            mov     _main_sloc0_1_0,dpl
+05F2 858369    1653            mov     (_main_sloc0_1_0 + 1),dph
+05F5 85F06A    1654            mov     (_main_sloc0_1_0 + 2),b
+05F8 F56B      1655            mov     (_main_sloc0_1_0 + 3),a
+05FA 8568AC    1656            mov     (_main_v_1_99 + 0x0004),_main_sloc0_1_0
+05FD 8569AD    1657            mov     ((_main_v_1_99 + 0x0004) + 1),(_main_sloc0_1_0 + 1)
+0600 856AAE    1658            mov     ((_main_v_1_99 + 0x0004) + 2),(_main_sloc0_1_0 + 2)
+0603 856BAF    1659            mov     ((_main_v_1_99 + 0x0004) + 3),(_main_sloc0_1_0 + 3)
+0606           1660   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:377: vrms[0]=v[0]*0.707106781187;
+0606 C0A8      1661            push    _main_v_1_99
+0608 C0A9      1662            push    (_main_v_1_99 + 1)
+060A C0AA      1663            push    (_main_v_1_99 + 2)
+060C C0AB      1664            push    (_main_v_1_99 + 3)
+060E 9004F3    1665            mov     dptr,#0x04F3
+0611 75F035    1666            mov     b,#0x35
+0614 743F      1667            mov     a,#0x3F
+0616 120000    1668            lcall   ___fsmul
+0619 AE82      1669            mov     r6,dpl
+061B AF83      1670            mov     r7,dph
+061D AAF0      1671            mov     r2,b
+061F FB        1672            mov     r3,a
+0620 E581      1673            mov     a,sp
+0622 24FC      1674            add     a,#0xfc
+0624 F581      1675            mov     sp,a
+0626 8EE8      1676            mov     _main_vrms_1_99,r6
+0628 8FE9      1677            mov     (_main_vrms_1_99 + 1),r7
+062A 8AEA      1678            mov     (_main_vrms_1_99 + 2),r2
+062C 8BEB      1679            mov     (_main_vrms_1_99 + 3),r3
+062E           1680   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:378: vrms[1]=v[1]*0.707106781187;
+062E C068      1681            push    _main_sloc0_1_0
+0630 C069      1682            push    (_main_sloc0_1_0 + 1)
+0632 C06A      1683            push    (_main_sloc0_1_0 + 2)
+0634 C06B      1684            push    (_main_sloc0_1_0 + 3)
+0636 9004F3    1685            mov     dptr,#0x04F3
+0639 75F035    1686            mov     b,#0x35
+063C 743F      1687            mov     a,#0x3F
+063E 120000    1688            lcall   ___fsmul
+0641 AA82      1689            mov     r2,dpl
+0643 AB83      1690            mov     r3,dph
+0645 ACF0      1691            mov     r4,b
+0647 FD        1692            mov     r5,a
+0648 E581      1693            mov     a,sp
+064A 24FC      1694            add     a,#0xfc
+064C F581      1695            mov     sp,a
+064E 8AEC      1696            mov     (_main_vrms_1_99 + 0x0004),r2
+0650 8BED      1697            mov     ((_main_vrms_1_99 + 0x0004) + 1),r3
+0652 8CEE      1698            mov     ((_main_vrms_1_99 + 0x0004) + 2),r4
+0654 8DEF      1699            mov     ((_main_vrms_1_99 + 0x0004) + 3),r5
+0656           1700   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:384: TL0=0;
+0656 758A00    1701            mov     _TL0,#0x00
+0659           1702   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:385: TH0=0;
+0659 758C00    1703            mov     _TH0,#0x00
+065C           1704   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:386: while (ADC_at_Pin(QFP32_MUX_P0_6)!=0); // Wait for the signal to be zero
+065C           1705   L018022?:
+065C 758204    1706            mov     dpl,#0x04
+065F 120000    1707            lcall   _ADC_at_Pin
+0662 E582      1708            mov     a,dpl
+0664 8583F0    1709            mov     b,dph
+0667 45F0      1710            orl     a,b
+0669 7000      1711            jnz     L018022?
+066B           1712   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:387: while (ADC_at_Pin(QFP32_MUX_P0_6)==0); // Wait for the signal to be positive
+066B           1713   L018025?:
+066B 758204    1714            mov     dpl,#0x04
+066E 120000    1715            lcall   _ADC_at_Pin
+0671 E582      1716            mov     a,dpl
+0673 8583F0    1717            mov     b,dph
+0676 45F0      1718            orl     a,b
+0678 6000      1719            jz      L018025?
+067A           1720   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:388: P0_0=1;
+067A D280      1721            setb    _P0_0
+067C           1722   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:389: TR0=1; // Start the timer 0
+067C D28C      1723            setb    _TR0
+067E           1724   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:390: while (ADC_at_Pin(QFP32_MUX_P0_1)!=0);
+067E           1725   L018028?:
+067E 758200    1726            mov     dpl,#0x00
+0681 120000    1727            lcall   _ADC_at_Pin
+0684 E582      1728            mov     a,dpl
+0686 8583F0    1729            mov     b,dph
+0689 45F0      1730            orl     a,b
+068B 7000      1731            jnz     L018028?
+068D           1732   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:391: while (ADC_at_Pin(QFP32_MUX_P0_1)==0); // Wait for the signal to be zero again                       
+068D           1733   L018031?:
+068D 758200    1734            mov     dpl,#0x00
+0690 120000    1735            lcall   _ADC_at_Pin
+0693 E582      1736            mov     a,dpl
+0695 8583F0    1737            mov     b,dph
+0698 45F0      1738            orl     a,b
+069A 6000      1739            jz      L018031?
+069C           1740   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:392: P0_0=0;
+069C C280      1741            clr     _P0_0
+069E           1742   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:393: TR0=0;
+069E C28C      1743            clr     _TR0
+06A0           1744   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:394: phase_diff_t = TH0*256.0+TL0;
+06A0 858C82    1745            mov     dpl,_TH0
+06A3 120000    1746            lcall   ___uchar2fs
+06A6 AA82      1747            mov     r2,dpl
+06A8 AB83      1748            mov     r3,dph
+06AA ACF0      1749            mov     r4,b
+06AC FD        1750            mov     r5,a
+06AD C002      1751            push    ar2
+06AF C003      1752            push    ar3
+06B1 C004      1753            push    ar4
+06B3 C005      1754            push    ar5
+06B5 900000    1755            mov     dptr,#0x0000
+06B8 75F080    1756            mov     b,#0x80
+06BB 7443      1757            mov     a,#0x43
+06BD 120000    1758            lcall   ___fsmul
+06C0 858268    1759            mov     _main_sloc0_1_0,dpl
+06C3 858369    1760            mov     (_main_sloc0_1_0 + 1),dph
+06C6 85F06A    1761            mov     (_main_sloc0_1_0 + 2),b
+06C9 F56B      1762            mov     (_main_sloc0_1_0 + 3),a
+06CB E581      1763            mov     a,sp
+06CD 24FC      1764            add     a,#0xfc
+06CF F581      1765            mov     sp,a
+06D1 AE8A      1766            mov     r6,_TL0
+06D3 7F00      1767            mov     r7,#0x00
+06D5 8E82      1768            mov     dpl,r6
+06D7 8F83      1769            mov     dph,r7
+06D9 120000    1770            lcall   ___sint2fs
+06DC AE82      1771            mov     r6,dpl
+06DE AF83      1772            mov     r7,dph
+06E0 AAF0      1773            mov     r2,b
+06E2 FB        1774            mov     r3,a
+06E3 C006      1775            push    ar6
+06E5 C007      1776            push    ar7
+06E7 C002      1777            push    ar2
+06E9 C003      1778            push    ar3
+06EB 856882    1779            mov     dpl,_main_sloc0_1_0
+06EE 856983    1780            mov     dph,(_main_sloc0_1_0 + 1)
+06F1 856AF0    1781            mov     b,(_main_sloc0_1_0 + 2)
+06F4 E56B      1782            mov     a,(_main_sloc0_1_0 + 3)
+06F6 120000    1783            lcall   ___fsadd
+06F9 AA82      1784            mov     r2,dpl
+06FB AB83      1785            mov     r3,dph
+06FD ACF0      1786            mov     r4,b
+06FF FD        1787            mov     r5,a
+0700 E581      1788            mov     a,sp
+0702 24FC      1789            add     a,#0xfc
+0704 F581      1790            mov     sp,a
+0706           1791   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:395: phase_diff=phase_diff_t*1000*(12.0/SYSCLK);
+0706 C002      1792            push    ar2
+0708 C003      1793            push    ar3
+070A C004      1794            push    ar4
+070C C005      1795            push    ar5
+070E 90C33E    1796            mov     dptr,#0xC33E
+0711 75F02E    1797            mov     b,#0x2E
+0714 7439      1798            mov     a,#0x39
+0716 120000    1799            lcall   ___fsmul
+0719 AA82      1800            mov     r2,dpl
+071B AB83      1801            mov     r3,dph
+071D ACF0      1802            mov     r4,b
+071F FD        1803            mov     r5,a
+0720 E581      1804            mov     a,sp
+0722 24FC      1805            add     a,#0xfc
+0724 F581      1806            mov     sp,a
+0726           1807   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:396: phase_diff_angle=(phase_diff*(360/16.666667));
+0726 C002      1808            push    ar2
+0728 C003      1809            push    ar3
+072A C004      1810            push    ar4
+072C C005      1811            push    ar5
+072E 90CCCD    1812            mov     dptr,#0xCCCD
+0731 75F0AC    1813            mov     b,#0xAC
+0734 7441      1814            mov     a,#0x41
+0736 120000    1815            lcall   ___fsmul
+0739 AA82      1816            mov     r2,dpl
+073B AB83      1817            mov     r3,dph
+073D ACF0      1818            mov     r4,b
+073F FD        1819            mov     r5,a
+0740 E581      1820            mov     a,sp
+0742 24FC      1821            add     a,#0xfc
+0744 F581      1822            mov     sp,a
+0746           1823   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:399: sprintf(buffer2,"%.1f",phase_diff_angle);
+0746 C002      1824            push    ar2
+0748 C003      1825            push    ar3
+074A C004      1826            push    ar4
+074C C005      1827            push    ar5
+074E 7428      1828            mov     a,#__str_5
+0750 C0E0      1829            push    acc
+0752 74C5      1830            mov     a,#(__str_5 >> 8)
+0754 C0E0      1831            push    acc
+0756 7480      1832            mov     a,#0x80
+0758 C0E0      1833            push    acc
+075A 7488      1834            mov     a,#_main_buffer2_1_99
+075C C0E0      1835            push    acc
+075E 74B6      1836            mov     a,#(_main_buffer2_1_99 >> 8)
+0760 C0E0      1837            push    acc
+0762 7440      1838            mov     a,#0x40
+0764 C0E0      1839            push    acc
+0766 120000    1840            lcall   _sprintf
+0769 E581      1841            mov     a,sp
+076B 24F6      1842            add     a,#0xf6
+076D F581      1843            mov     sp,a
+076F           1844   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:400: LCDprint2(buffer2,2,0);
+076F 75A002    1845            mov     _LCDprint2_PARM_2,#0x02
+0772 755000    1846            mov     _LCDprint2_PARM_3,#0x00
+0775 90B688    1847            mov     dptr,#_main_buffer2_1_99
+0778 75F040    1848            mov     b,#0x40
+077B 120000    1849            lcall   _LCDprint2
+077E           1850   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\ref.c:407: waitms(500);
+077E 9001F4    1851            mov     dptr,#0x01F4
+0781 120000    1852            lcall   _waitms
+0784 020000    1853            ljmp    L018035?
+0787           1854            rseg R_CSEG
+0787           1855   
+0000           1856            rseg R_XINIT
+0000           1857   
+0000           1858            rseg R_CONST
+0000           1859   __str_0:
+0000 1B        1860            db 0x1B
+0001 5B324A    1861            db '[2J'
+0004 00        1862            db 0x00
+0005           1863   __str_1:
+0005 41444320  1864            db 'ADC test program'
+     74657374
+     2070726F
+     6772616D
+0015 0A        1865            db 0x0A
+0016 46696C65  1866            db 'File: %s'
+     3A202573
+001E 0A        1867            db 0x0A
+001F 436F6D70  1868            db 'Compiled: %s, %s'
+     696C6564
+     3A202573
+     2C202573
+002F 0A        1869            db 0x0A
+0030 0A        1870            db 0x0A
+0031 00        1871            db 0x00
+0032           1872   __str_2:
+0032 433A      1873            db 'C:'
+0034 5C        1874            db 0x5C
+0035 55736572  1875            db 'Users'
+     73
+003A 5C        1876            db 0x5C
+003B 32393737  1877            db '29778'
+     38
+0040 5C        1878            db 0x5C
+0041 4F6E6544  1879            db 'OneDrive'
+     72697665
+0049 5C        1880            db 0x5C
+004A 4465736B  1881            db 'Desktop'
+     746F70
+0051 5C        1882            db 0x5C
+0052 7365636F  1883            db 'second_year'
+     6E645F79
+     656172
+005D 5C        1884            db 0x5C
+005E 454C4543  1885            db 'ELEC 291'
+     20323931
+0066 5C        1886            db 0x5C
+0067 6C616235  1887            db 'lab5'
+006B 5C        1888            db 0x5C
+006C 656C      1889            db 'el'
+006E 65635F32  1890            db 'ec_291_lab5'
+     39315F6C
+     616235
+0079 5C        1891            db 0x5C
+007A 7265662E  1892            db 'ref.c'
+     63
+007F 00        1893            db 0x00
+0080           1894   __str_3:
+0080 4D617220  1895            db 'Mar  6 2024'
+     20362032
+     303234
+008B 00        1896            db 0x00
+008C           1897   __str_4:
+008C 31333A33  1898            db '13:32:37'
+     323A3337
+0094 00        1899            db 0x00
+0095           1900   __str_5:
+0095 252E3166  1901            db '%.1f'
+0099 00        1902            db 0x00
+009A           1903   
+0003           1904            CSEG
+0003           1905   
+0003           1906   end

@@ -1,7 +1,7 @@
 0000              1   ;--------------------------------------------------------
 0000              2   ; File Created by C51
 0000              3   ; Version 1.0.0 #1170 (Feb 16 2022) (MSVC)
-0000              4   ; This file was generated Tue Mar 05 20:06:16 2024
+0000              4   ; This file was generated Wed Mar 06 13:09:28 2024
 0000              5   ;--------------------------------------------------------
                   5   $name lab5_1
                   6   $optc51 --model-small
@@ -485,7 +485,7 @@
 0000            485            rseg R_DSEG
 0000            486   _main_v_1_63:
 0000            487            ds 8
-0008            488   _main_ref_period_1_63:
+0008            488   _main_period_1_63:
 0008            489            ds 4
 000C            490   _main_sloc0_1_0:
 000C            491            ds 4
@@ -930,7 +930,7 @@
 0196            930   ;------------------------------------------------------------
 0196            931   ;v                         Allocated with name '_main_v_1_63'
 0196            932   ;overflow_count            Allocated to registers r2 r3 r4 r5 
-0196            933   ;ref_period                Allocated with name '_main_ref_period_1_63'
+0196            933   ;period                    Allocated with name '_main_period_1_63'
 0196            934   ;sloc0                     Allocated with name '_main_sloc0_1_0'
 0196            935   ;------------------------------------------------------------
 0196            936   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_1.c:210: void main (void)
@@ -1133,7 +1133,7 @@
 02E4           1133   L011019?:
 02E4           1134   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_1.c:269: TR0=0; // Stop timer 0, the 24-bit number [overflow_count-TH0-TL0] has the period!
 02E4 C28C      1135            clr     _TR0
-02E6           1136   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_1.c:270: ref_period=(overflow_count*65536.0+TH0*256.0+TL0)*(12.0/SYSCLK);
+02E6           1136   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_1.c:270: period=(overflow_count*65536.0+TH0*256.0+TL0)*(12.0/SYSCLK);
 02E6 C002      1137            push    ar2
 02E8 C003      1138            push    ar3
 02EA C004      1139            push    ar4
@@ -1219,10 +1219,10 @@
 039E 75F032    1219            mov     b,#0x32
 03A1 7434      1220            mov     a,#0x34
 03A3 120000    1221            lcall   ___fsmul
-03A6 858268    1222            mov     _main_ref_period_1_63,dpl
-03A9 858369    1223            mov     (_main_ref_period_1_63 + 1),dph
-03AC 85F06A    1224            mov     (_main_ref_period_1_63 + 2),b
-03AF F56B      1225            mov     (_main_ref_period_1_63 + 3),a
+03A6 858268    1222            mov     _main_period_1_63,dpl
+03A9 858369    1223            mov     (_main_period_1_63 + 1),dph
+03AC 85F06A    1224            mov     (_main_period_1_63 + 2),b
+03AF F56B      1225            mov     (_main_period_1_63 + 3),a
 03B1 E581      1226            mov     a,sp
 03B3 24FC      1227            add     a,#0xfc
 03B5 F581      1228            mov     sp,a
@@ -1252,11 +1252,11 @@
 03E3 E581      1252            mov     a,sp
 03E5 24F9      1253            add     a,#0xf9
 03E7 F581      1254            mov     sp,a
-03E9           1255   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_1.c:279: printf( "\rReference Period=%f ms    ", ref_period*1000.0);
-03E9 C068      1256            push    _main_ref_period_1_63
-03EB C069      1257            push    (_main_ref_period_1_63 + 1)
-03ED C06A      1258            push    (_main_ref_period_1_63 + 2)
-03EF C06B      1259            push    (_main_ref_period_1_63 + 3)
+03E9           1255   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_1.c:279: printf( "\rPeriod=%f ms    ", period*1000.0);
+03E9 C068      1256            push    _main_period_1_63
+03EB C069      1257            push    (_main_period_1_63 + 1)
+03ED C06A      1258            push    (_main_period_1_63 + 2)
+03EF C06B      1259            push    (_main_period_1_63 + 3)
 03F1 900000    1260            mov     dptr,#0x0000
 03F4 75F07A    1261            mov     b,#0x7A
 03F7 7444      1262            mov     a,#0x44
@@ -1344,13 +1344,13 @@
      5F312E63
 0082 00        1328            db 0x00
 0083           1329   __str_3:
-0083 4D617220  1330            db 'Mar  5 2024'
-     20352032
+0083 4D617220  1330            db 'Mar  6 2024'
+     20362032
      303234
 008E 00        1331            db 0x00
 008F           1332   __str_4:
-008F 32303A30  1333            db '20:06:16'
-     363A3136
+008F 31333A30  1333            db '13:09:28'
+     393A3238
 0097 00        1334            db 0x00
 0098           1335   __str_5:
 0098 56405031  1336            db 'V@P1.4=%7.5f'
@@ -1361,15 +1361,12 @@
 00A6 00        1339            db 0x00
 00A7           1340   __str_6:
 00A7 0D        1341            db 0x0D
-00A8 52656665  1342            db 'Reference Period=%f ms    '
-     72656E63
-     65205065
-     72696F64
-     3D256620
-     6D732020
-     2020
-00C2 00        1343            db 0x00
-00C3           1344   
+00A8 50657269  1342            db 'Period=%f ms    '
+     6F643D25
+     66206D73
+     20202020
+00B8 00        1343            db 0x00
+00B9           1344   
 0003           1345            CSEG
 0003           1346   
 0003           1347   end

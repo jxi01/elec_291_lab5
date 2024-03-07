@@ -1,7 +1,7 @@
 ;--------------------------------------------------------
 ; File Created by C51
 ; Version 1.0.0 #1170 (Feb 16 2022) (MSVC)
-; This file was generated Tue Mar 05 20:06:16 2024
+; This file was generated Wed Mar 06 13:09:28 2024
 ;--------------------------------------------------------
 $name lab5_1
 $optc51 --model-small
@@ -485,7 +485,7 @@ _TFRQ           BIT 0xdf
 	rseg R_DSEG
 _main_v_1_63:
 	ds 8
-_main_ref_period_1_63:
+_main_period_1_63:
 	ds 4
 _main_sloc0_1_0:
 	ds 4
@@ -930,7 +930,7 @@ _Volts_at_Pin:
 ;------------------------------------------------------------
 ;v                         Allocated with name '_main_v_1_63'
 ;overflow_count            Allocated to registers r2 r3 r4 r5 
-;ref_period                Allocated with name '_main_ref_period_1_63'
+;period                    Allocated with name '_main_period_1_63'
 ;sloc0                     Allocated with name '_main_sloc0_1_0'
 ;------------------------------------------------------------
 ;	C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_1.c:210: void main (void)
@@ -1133,7 +1133,7 @@ L011043?:
 L011019?:
 ;	C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_1.c:269: TR0=0; // Stop timer 0, the 24-bit number [overflow_count-TH0-TL0] has the period!
 	clr	_TR0
-;	C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_1.c:270: ref_period=(overflow_count*65536.0+TH0*256.0+TL0)*(12.0/SYSCLK);
+;	C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_1.c:270: period=(overflow_count*65536.0+TH0*256.0+TL0)*(12.0/SYSCLK);
 	push	ar2
 	push	ar3
 	push	ar4
@@ -1219,10 +1219,10 @@ L011019?:
 	mov	b,#0x32
 	mov	a,#0x34
 	lcall	___fsmul
-	mov	_main_ref_period_1_63,dpl
-	mov	(_main_ref_period_1_63 + 1),dph
-	mov	(_main_ref_period_1_63 + 2),b
-	mov	(_main_ref_period_1_63 + 3),a
+	mov	_main_period_1_63,dpl
+	mov	(_main_period_1_63 + 1),dph
+	mov	(_main_period_1_63 + 2),b
+	mov	(_main_period_1_63 + 3),a
 	mov	a,sp
 	add	a,#0xfc
 	mov	sp,a
@@ -1252,11 +1252,11 @@ L011019?:
 	mov	a,sp
 	add	a,#0xf9
 	mov	sp,a
-;	C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_1.c:279: printf( "\rReference Period=%f ms    ", ref_period*1000.0);
-	push	_main_ref_period_1_63
-	push	(_main_ref_period_1_63 + 1)
-	push	(_main_ref_period_1_63 + 2)
-	push	(_main_ref_period_1_63 + 3)
+;	C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_1.c:279: printf( "\rPeriod=%f ms    ", period*1000.0);
+	push	_main_period_1_63
+	push	(_main_period_1_63 + 1)
+	push	(_main_period_1_63 + 2)
+	push	(_main_period_1_63 + 3)
 	mov	dptr,#0x0000
 	mov	b,#0x7A
 	mov	a,#0x44
@@ -1327,10 +1327,10 @@ __str_2:
 	db 'lab5_1.c'
 	db 0x00
 __str_3:
-	db 'Mar  5 2024'
+	db 'Mar  6 2024'
 	db 0x00
 __str_4:
-	db '20:06:16'
+	db '13:09:28'
 	db 0x00
 __str_5:
 	db 'V@P1.4=%7.5f'
@@ -1339,7 +1339,7 @@ __str_5:
 	db 0x00
 __str_6:
 	db 0x0D
-	db 'Reference Period=%f ms    '
+	db 'Period=%f ms    '
 	db 0x00
 
 	CSEG

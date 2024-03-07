@@ -15,7 +15,7 @@ R_GSINIT,code,0000,NO
 R_BSEG,bit,0000,NO
 R_XSEG,xdata,0000,NO
 BIT_BANK,data,0000,OV
-R_CONST,code,00C3,NO
+R_CONST,code,00B9,NO
 rbank0,data,0000,OV
 R_PSEG,xdata,0000,NO
 R_DINIT,code,0000,NO
@@ -42,13 +42,13 @@ L004007?,R_CSEG,0091,0000
 L004004?,R_CSEG,0081,0000
 L004001?,R_CSEG,0086,0000
 L011019?,R_CSEG,02E4,0000
+_main_period_1_63,R_DSEG,0008,0004
 L011017?,R_CSEG,029D,0000
 L011012?,R_CSEG,0256,0000
 L011021?,R_CSEG,0202,0000
 L006009?,R_CSEG,00D8,0000
 L006007?,R_CSEG,00D1,0000
 L006005?,R_CSEG,00A6,0000
-_main_ref_period_1_63,R_DSEG,0008,0004
 L011043?,R_CSEG,02BE,0000
 L006001?,R_CSEG,00AF,0000
 L011041?,R_CSEG,0277,0000
@@ -556,10 +556,10 @@ C0 05
 75 F0 32
 74 34
 12 addr16(___fsmul;)  
-85 82 data8(_main_ref_period_1_63;)
-85 83 data8(_main_ref_period_1_63;0x0001;+;)
-85 F0 data8(_main_ref_period_1_63;0x0002;+;)
-F5 data8(_main_ref_period_1_63;0x0003;+;)
+85 82 data8(_main_period_1_63;)
+85 83 data8(_main_period_1_63;0x0001;+;)
+85 F0 data8(_main_period_1_63;0x0002;+;)
+F5 data8(_main_period_1_63;0x0003;+;)
 E5 81
 24 FC
 F5 81
@@ -587,10 +587,10 @@ C0 E0
 E5 81
 24 F9
 F5 81
-C0 data8(_main_ref_period_1_63;)
-C0 data8(_main_ref_period_1_63;0x0001;+;)
-C0 data8(_main_ref_period_1_63;0x0002;+;)
-C0 data8(_main_ref_period_1_63;0x0003;+;)
+C0 data8(_main_period_1_63;)
+C0 data8(_main_period_1_63;0x0001;+;)
+C0 data8(_main_period_1_63;0x0002;+;)
+C0 data8(_main_period_1_63;0x0003;+;)
 90 00 00
 75 F0 7A
 74 44
@@ -660,17 +660,16 @@ F5 81
 5C
 6C 61 62 35 5F 31 2E 63 
 00
-4D 61 72 20 20 35 20 32 30 32 34 
+4D 61 72 20 20 36 20 32 30 32 34 
 00
-32 30 3A 30 36 3A 31 36 
+31 33 3A 30 39 3A 32 38 
 00
 56 40 50 31 2E 34 3D 25 37 2E 35 66 
 0D
 0A
 00
 0D
-52 65 66 65 72 65 6E 63 65 20 50 65 72 69 6F 64 3D
-25 66 20 6D 73 20 20 20 20 
+50 65 72 69 6F 64 3D 25 66 20 6D 73 20 20 20 20 
 00
 </CODE>
 

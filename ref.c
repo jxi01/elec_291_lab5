@@ -7,12 +7,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <EFM8LB1.h>
+#include <math.h>
 
 // ~C51~  
 
 #define SYSCLK 72000000L
 #define BAUDRATE 115200L
 #define SARCLK 18000000L
+
 
 #define LCD_RS P1_7
 // #define LCD_RW Px_x // Not used in this code.  Connect to GND
@@ -21,7 +23,12 @@
 #define LCD_D5 P1_2
 #define LCD_D6 P1_1
 #define LCD_D7 P1_0
-#define CHARS_PER_LINE 16
+#define CHARS_PER_LINE 16 
+
+
+
+unsigned char overflow_count1;
+unsigned char overflow_count2;
 
 char _c51_external_startup (void)
 {
@@ -150,19 +157,20 @@ void Timer3us(unsigned char us)
 	TMR3CN0 = 0 ;                   // Stop Timer3 and clear overflow flag
 }
 
-void TIMER0_Init(void)
-{
-	TMOD&=0b_1111_0000; // Set the bits of Timer/Counter 0 to zero
-	TMOD|=0b_0000_0001; // Timer/Counter 0 used as a 16-bit timer
-	TR0=0; // Stop Timer/Counter 0
-}
-
 void waitms (unsigned int ms)
 {
 	unsigned int j;
 	unsigned char k;
 	for(j=0; j<ms; j++)
 		for (k=0; k<4; k++) Timer3us(250);
+}
+
+
+void TIMER0_Init(void)
+{
+	TMOD&=0b_1111_0000; // Set the bits of Timer/Counter 0 to zero
+	TMOD|=0b_0000_0001; // Timer/Counter 0 used as a 16-bit timer
+	TR0=0; // Stop Timer/Counter 0
 }
 
 #define VDD 3.3035 // The measured value of VDD in volts
@@ -203,27 +211,18 @@ unsigned int ADC_at_Pin(unsigned char pin)
 	return (ADC0);
 }
 
-unsigned int Get_ADC (void)
-{
-    ADINT = 0;
-    ADBUSY = 1;
-    while (!ADINT); // Wait for conversion to complete
-    return (ADC0);
-}
-
 float Volts_at_Pin(unsigned char pin)
 {
 	 return ((ADC_at_Pin(pin)*VDD)/0b_0011_1111_1111_1111);
 }
 
-
+//For lcd printing
 void LCD_pulse (void)
 {
 	LCD_E=1;
 	Timer3us(40);
 	LCD_E=0;
 }
-
 void LCD_byte (unsigned char x)
 {
 	// The accumulator in the C8051Fxxx is bit addressable!
@@ -272,6 +271,7 @@ void LCD_4BIT (void)
 	WriteCommand(0x01); // Clear screen command (takes some time)
 	waitms(20); // Wait for clear screen command to finsih.
 }
+
 void LCDprint(char * string, unsigned char line, bit clear)
 {
 	int j;
@@ -281,32 +281,44 @@ void LCDprint(char * string, unsigned char line, bit clear)
 	for(j=0; string[j]!=0; j++)	WriteData(string[j]);// Write the message
 	if(clear) for(; j<CHARS_PER_LINE; j++) WriteData(' '); // Clear the rest of the line
 }
+void LCDprint2(char * string, unsigned char line, unsigned char col)
+{
+    int j;
 
+    WriteCommand(line==2?0xc0|col:0x80|col); // Move cursor to line and column
+    for(j=0; string[j]!=0; j++) WriteData(string[j]); // Write the message
+}
+
+
+
+
+unsigned int Get_ADC (void)
+{
+	ADINT = 0;
+	ADBUSY = 1;
+	while (!ADINT); // Wait for conversion to complete
+	return (ADC0);
+}
 
 
 void main (void)
 {
-	float ref_signal;
-	float ref_peak=0.0;
-	float test_signal;
-	float test_peak=0.0;
-	float ref_rms, test_rms;
-
+	float v[2];
+	float vrms[2];
+	char buffer1[10];
+	char buffer2[20];
+	//char buffer3[20];
+	//char buffer4[20];
 	float half_period;
+
 	float period;
 	float frequency;
-	float overflow_count=0;
-	int count=0;
-
-	float current_volt;
-
-	float time_diff;
+	
+	float phase_diff_t=0.0;
 	float phase_diff;
-	int negative_flag = 0;
-
-	char buff1[17];
-	char buff2[17];
-
+	float phase_diff_angle;
+	float number=2;
+	LCD_4BIT();
 	TIMER0_Init();
 
     waitms(500); // Give PuTTy a chance to start before sending
@@ -317,148 +329,82 @@ void main (void)
 	        "Compiled: %s, %s\n\n",
 	        __FILE__, __DATE__, __TIME__);
 	
-	InitPinADC(1, 4); // Configure P1.4 as analog input
 	InitPinADC(2, 2); // Configure P2.2 as analog input
+	InitPinADC(2, 3); // Configure P2.3 as analog input
+	InitPinADC(2, 4); // Configure P2.4 as analog input
+	InitPinADC(2, 5); // Configure P2.5 as analog input
+    InitPinADC(0, 1); // for reference wave period
+    InitPinADC(0, 6); // for test wave period
     InitADC();
-	
-	//intialize LCD
-	LCD_4BIT();
-
-
-    // wait for zero cross
+        
 
 	while(1)
 	{
-		TL0=0; 
-		TH0=0;
-		TF0=0;
-		negative_flag = 0;
-		// Half period of the reference signal, at P1.4
-		// Start tracking the reference signal
-		ADC0MX = QFP32_MUX_P1_4;
-		ADINT = 0;
-		ADBUSY=1;
-		while (!ADINT); // Wait for conversion to complete
-		// Reset the timer
+
+		//we are using pin 0.1 for reference wave and pin 0.6 for test wave 
+	    
+		//Reset the timer
 		TL0=0;
 		TH0=0;
-		while (Get_ADC()!=0); // Wait for the signal to be zero
-		while (Get_ADC()==0); // Wait for the signal to be positive
+		while (ADC_at_Pin(QFP32_MUX_P0_1)!=0); // Wait for the signal to be zero
+		while (ADC_at_Pin(QFP32_MUX_P0_1)==0); // Wait for the signal to be positive
 		TR0=1; // Start the timer 0
-		while (Get_ADC()!=0); // Wait for the signal to be zero again
-		TR0=0; // Stop timer 0
+		while (ADC_at_Pin(QFP32_MUX_P0_1)!=0); // Wait for the signal to be zero again		
+		TR0=0;
 		half_period=TH0*256.0+TL0; // The 16-bit number [TH0-TL0]
-		// Time from the beginning of the sine wave to its peak
-		overflow_count=65536-(half_period/2);
-		period=2000000*half_period*12/SYSCLK; //unit: us
-		frequency=1/period*1000000;
-
-	    // Read 14-bit value from the pins configured as analog inputs
-		ref_signal = Volts_at_Pin(QFP32_MUX_P1_4);
-		test_signal = Volts_at_Pin(QFP32_MUX_P2_2);
-
-		printf ("V@P1.4=%7.5f\r\n", ref_signal);
-		printf ("V@P2.2=%7.5f\r\n", test_signal);
-
-		// period = measure_period();
-		printf("Period=%7.5f us\r\n",period);
-		printf("frequency=%7.5f Hz\r\n",frequency);
+		overflow_count1=65536-(half_period/2);// Time from the beginning of the sine wave to its peak
+		period=half_period*2.0*(12.0/SYSCLK);
+		frequency=1.0/period;
+		sprintf(buffer1,"%.1f",frequency);
+		LCDprint(buffer1,1,1);
 		
-		//ref_peak = measure_peak_ref_volt(period);
-		// test_peak = measure_peak_test_volt(period);
-
-		// find the peak ref voltage
-		while (Volts_at_Pin(QFP32_MUX_P1_4)!=0); // Wait for the signal to be zero
-		while (Volts_at_Pin(QFP32_MUX_P1_4)==0); // Wait for the signal to be positive
-		for(count = 0; count < period; count++){
-			current_volt = Volts_at_Pin(QFP32_MUX_P1_4);
-			if(current_volt > ref_peak){
-				ref_peak = current_volt;
-			}
-			Timer3us(1);
-		}
-		printf ("Peak ref voltage=%7.5f V\r\n", ref_peak);
-		ref_rms = ref_peak * 0.707106781187;
+		//measure peak voltage of reference signal
+		while (ADC_at_Pin(QFP32_MUX_P0_1)!=0); 
+		while (ADC_at_Pin(QFP32_MUX_P0_1)==0);
+		waitms(period*1000/4);
+		v[0]=Volts_at_Pin(QFP32_MUX_P0_1);
+		//printf("%f",v[0]);
 		
-		//find the peak test voltage
-		while (Volts_at_Pin(QFP32_MUX_P2_2)!=0); // Wait for the signal to be zero
-		while (Volts_at_Pin(QFP32_MUX_P2_2)==0); // Wait for the signal to be positive
-		for(count = 0; count < period; count++){
-			current_volt = Volts_at_Pin(QFP32_MUX_P2_2);
-			if(current_volt > test_peak){
-				test_peak = current_volt;
-			}
-			Timer3us(1);
-		}
-		printf ("Peak test voltage=%7.5f V\r\n", test_peak);
-		test_rms = test_peak * 0.707106781187;
-
-		//find the time difference
-		//Reset timer
-		TL0=0; 
+		//measure peak voltage of test signal
+		while (ADC_at_Pin(QFP32_MUX_P0_6)!=0); 
+		while (ADC_at_Pin(QFP32_MUX_P0_6)==0);
+		waitms(period*1000/4);
+		v[1]=Volts_at_Pin(QFP32_MUX_P0_6);
+		//printf("%f",v[1]);
+		
+		
+		//calculate vrms
+		vrms[0]=v[0]*0.707106781187;
+		vrms[1]=v[1]*0.707106781187;
+		
+		
+		
+		//start tracking the test wave
+		//Reset the timer
+		TL0=0;
 		TH0=0;
-		TF0=0;
-		overflow_count=0.0;
-		// //wait till zero cross of ref signal
-		// while (Volts_at_Pin(QFP32_MUX_P1_4)!=0); // Wait for the signal to be zero
-		// while (Volts_at_Pin(QFP32_MUX_P1_4)==0); // Wait for the signal to be positive
-		// TR0 = 1; //start timer
-		// //wait till zero cross of test signal
-		// while (Volts_at_Pin(QFP32_MUX_P2_2)!=0); // Wait for the signal to be zero
-		// while (Volts_at_Pin(QFP32_MUX_P2_2)==0); // Wait for the signal to be positive
-		// TR0 = 0; // end timer
-		// time_diff=1000000*(TH0*256.0+TL0)*12/SYSCLK; //unit: us
-
-		//while(Volts_at_Pin(QFP32_MUX_P1_4) <= 0 && Volts_at_Pin(QFP32_MUX_P2_2) <= 0);
+		while (ADC_at_Pin(QFP32_MUX_P0_6)!=0); // Wait for the signal to be zero
+		while (ADC_at_Pin(QFP32_MUX_P0_6)==0); // Wait for the signal to be positive
+		P0_0=1;
+		TR0=1; // Start the timer 0
+		while (ADC_at_Pin(QFP32_MUX_P0_1)!=0);
+		while (ADC_at_Pin(QFP32_MUX_P0_1)==0); // Wait for the signal to be zero again			
+		P0_0=0;
+		TR0=0;
+	    phase_diff_t = TH0*256.0+TL0;
+		phase_diff=phase_diff_t*1000*(12.0/SYSCLK);
+		phase_diff_angle=(phase_diff*(360/16.666667));
+		//remember to add negative signs for negative and positive
+		//printf("phase diff: %.4f\n",phase_diff_angle);
+		sprintf(buffer2,"%.1f",phase_diff_angle);
+		LCDprint2(buffer2,2,0);
 		
-		while(ADC_at_Pin(QFP32_MUX_P1_4) != 0);
-		while(ADC_at_Pin(QFP32_MUX_P1_4) == 0){
-		Timer3us(period/2);
-		if(Volts_at_Pin(QFP32_MUX_P2_2) > 0 ){ //if test_voltage 
-			negative_flag = 0;
-		}else{
-			negative_flag = 1;
-		}
-		}
-		waitms(1);
+		
+		
+			    
+	  
 
-		//Reset timer
-		TL0=0; 
-		TH0=0;
-		TF0=0;
-		overflow_count=0.0;
-		while(ADC_at_Pin(QFP32_MUX_P1_4) != 0);
-		while(ADC_at_Pin(QFP32_MUX_P1_4) == 0);
-		while (ADC_at_Pin(QFP32_MUX_P1_4) != 0){
-			while(ADC_at_Pin(QFP32_MUX_P2_2) == 0 && ADC_at_Pin(QFP32_MUX_P1_4) != 0){
-				TR0 = 1;
-				if(TF0 == 1){
-					TF0 = 0;
-					overflow_count++;
-				}
-			}
-			TR0 = 0;
-		}
-		time_diff=1000000*(overflow_count*65536.0+TH0*256.0+TL0)*(12.0/SYSCLK); //unit: us
-		if(negative_flag == 0){
-			phase_diff = time_diff * 360.0/period;
-		}else{
-			phase_diff = (-1)*time_diff * 360.0/period;
-		}
-		// phase_diff = time_diff * 360.0/period;
-		// while(phase_diff>180){
-		// 	phase_diff -= 360;}
-		// while(phase_diff<180){
-		// 	phase_diff +=360;
-		// }
-		printf("time diff = %7.5f us\r\n",time_diff);
-		printf("phase diff = %7.5f deg\r\n",phase_diff);
-
-		//print on LCD, ref_rms, test_rms, phase_diff
-		sprintf(buff1,"ref=%.1f test=%.1f\n",ref_rms,test_rms);
-		LCDprint(buff1,1,1);
-		sprintf(buff2,"ph=%.1f fr=%.1f/\n",phase_diff,frequency);
-		LCDprint(buff2,2,1);
+		waitms(500);
 
 	 }  
-}	
+}
