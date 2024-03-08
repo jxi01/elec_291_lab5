@@ -1,7 +1,7 @@
 ;--------------------------------------------------------
 ; File Created by C51
 ; Version 1.0.0 #1170 (Feb 16 2022) (MSVC)
-; This file was generated Thu Mar 07 01:45:18 2024
+; This file was generated Thu Mar 07 13:17:32 2024
 ;--------------------------------------------------------
 $name lab5_extra
 $optc51 --model-small
@@ -2360,7 +2360,7 @@ L017139?:
 	pop	ar4
 	pop	ar3
 	pop	ar2
-;	C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_extra.c:463: sprintf(buff2,"%.1frad fr=%.1f/\n",phase_diff*3.141592653/180,frequency); //show rad if button is pressed
+;	C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_extra.c:463: sprintf(buff2,"%.2frad fr=%.1f",phase_diff*3.141592653/180,frequency); //show rad if button is pressed
 	push	ar2
 	push	ar3
 	push	ar4
@@ -2409,7 +2409,7 @@ L017139?:
 	pop	ar2
 	ljmp	L017056?
 L017062?:
-;	C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_extra.c:469: sprintf(buff1,"ref=%.1f test=%.1f\n",ref_rms,test_rms);
+;	C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_extra.c:469: sprintf(buff1,"ref=%.1f test=%.3f\n",ref_rms,test_rms);
 	push	ar6
 	push	ar7
 	push	ar0
@@ -2422,9 +2422,9 @@ L017062?:
 	push	(_main_ref_rms_1_75 + 1)
 	push	(_main_ref_rms_1_75 + 2)
 	push	(_main_ref_rms_1_75 + 3)
-	mov	a,#__str_13
+	mov	a,#__str_15
 	push	acc
-	mov	a,#(__str_13 >> 8)
+	mov	a,#(__str_15 >> 8)
 	push	acc
 	mov	a,#0x80
 	push	acc
@@ -2448,7 +2448,7 @@ L017062?:
 	pop	ar0
 	pop	ar7
 	pop	ar6
-;	C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_extra.c:471: sprintf(buff2,"%.1fdeg fr=%.1f/\n",phase_diff,frequency);
+;	C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_extra.c:471: sprintf(buff2,"%.1fdeg fr=%.1f",phase_diff,frequency);
 	push	_main_frequency_1_75
 	push	(_main_frequency_1_75 + 1)
 	push	(_main_frequency_1_75 + 2)
@@ -2457,9 +2457,9 @@ L017062?:
 	push	ar7
 	push	ar0
 	push	ar1
-	mov	a,#__str_15
+	mov	a,#__str_16
 	push	acc
-	mov	a,#(__str_15 >> 8)
+	mov	a,#(__str_16 >> 8)
 	push	acc
 	mov	a,#0x80
 	push	acc
@@ -2524,7 +2524,7 @@ __str_3:
 	db 'Mar  7 2024'
 	db 0x00
 __str_4:
-	db '01:45:18'
+	db '13:17:31'
 	db 0x00
 __str_5:
 	db 'V@P1.4=%7.5f'
@@ -2571,12 +2571,14 @@ __str_13:
 	db 0x0A
 	db 0x00
 __str_14:
-	db '%.1frad fr=%.1f/'
-	db 0x0A
+	db '%.2frad fr=%.1f'
 	db 0x00
 __str_15:
-	db '%.1fdeg fr=%.1f/'
+	db 'ref=%.1f test=%.3f'
 	db 0x0A
+	db 0x00
+__str_16:
+	db '%.1fdeg fr=%.1f'
 	db 0x00
 
 	CSEG

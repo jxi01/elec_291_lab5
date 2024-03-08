@@ -1,7 +1,7 @@
 0000              1   ;--------------------------------------------------------
 0000              2   ; File Created by C51
 0000              3   ; Version 1.0.0 #1170 (Feb 16 2022) (MSVC)
-0000              4   ; This file was generated Thu Mar 07 01:45:18 2024
+0000              4   ; This file was generated Thu Mar 07 13:17:32 2024
 0000              5   ;--------------------------------------------------------
                   5   $name lab5_extra
                   6   $optc51 --model-small
@@ -2360,7 +2360,7 @@
 0B25 D004      2360            pop     ar4
 0B27 D003      2361            pop     ar3
 0B29 D002      2362            pop     ar2
-0B2B           2363   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_extra.c:463: sprintf(buff2,"%.1frad fr=%.1f/\n",phase_diff*3.141592653/180,frequency); //show rad if button is pressed
+0B2B           2363   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_extra.c:463: sprintf(buff2,"%.2frad fr=%.1f",phase_diff*3.141592653/180,frequency); //show rad if button is pressed
 0B2B C002      2364            push    ar2
 0B2D C003      2365            push    ar3
 0B2F C004      2366            push    ar4
@@ -2409,7 +2409,7 @@
 0B88 D002      2409            pop     ar2
 0B8A 020000    2410            ljmp    L017056?
 0B8D           2411   L017062?:
-0B8D           2412   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_extra.c:469: sprintf(buff1,"ref=%.1f test=%.1f\n",ref_rms,test_rms);
+0B8D           2412   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_extra.c:469: sprintf(buff1,"ref=%.1f test=%.3f\n",ref_rms,test_rms);
 0B8D C006      2413            push    ar6
 0B8F C007      2414            push    ar7
 0B91 C000      2415            push    ar0
@@ -2422,9 +2422,9 @@
 0B9F C079      2422            push    (_main_ref_rms_1_75 + 1)
 0BA1 C07A      2423            push    (_main_ref_rms_1_75 + 2)
 0BA3 C07B      2424            push    (_main_ref_rms_1_75 + 3)
-0BA5 7400      2425            mov     a,#__str_13
+0BA5 74C0      2425            mov     a,#__str_15
 0BA7 C0E0      2426            push    acc
-0BA9 74CF      2427            mov     a,#(__str_13 >> 8)
+0BA9 74CF      2427            mov     a,#(__str_15 >> 8)
 0BAB C0E0      2428            push    acc
 0BAD 7480      2429            mov     a,#0x80
 0BAF C0E0      2430            push    acc
@@ -2448,7 +2448,7 @@
 0BD6 D000      2448            pop     ar0
 0BD8 D007      2449            pop     ar7
 0BDA D006      2450            pop     ar6
-0BDC           2451   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_extra.c:471: sprintf(buff2,"%.1fdeg fr=%.1f/\n",phase_diff,frequency);
+0BDC           2451   ;        C:\Users\29778\OneDrive\Desktop\second_year\ELEC 291\lab5\elec_291_lab5\lab5_extra.c:471: sprintf(buff2,"%.1fdeg fr=%.1f",phase_diff,frequency);
 0BDC C068      2452            push    _main_frequency_1_75
 0BDE C069      2453            push    (_main_frequency_1_75 + 1)
 0BE0 C06A      2454            push    (_main_frequency_1_75 + 2)
@@ -2457,9 +2457,9 @@
 0BE6 C007      2457            push    ar7
 0BE8 C000      2458            push    ar0
 0BEA C001      2459            push    ar1
-0BEC 74C0      2460            mov     a,#__str_15
+0BEC 7400      2460            mov     a,#__str_16
 0BEE C0E0      2461            push    acc
-0BF0 74CF      2462            mov     a,#(__str_15 >> 8)
+0BF0 74D0      2462            mov     a,#(__str_16 >> 8)
 0BF2 C0E0      2463            push    acc
 0BF4 7480      2464            mov     a,#0x80
 0BF6 C0E0      2465            push    acc
@@ -2544,8 +2544,8 @@
      303234
 0092 00        2525            db 0x00
 0093           2526   __str_4:
-0093 30313A34  2527            db '01:45:18'
-     353A3138
+0093 31333A31  2527            db '13:17:31'
+     373A3331
 009B 00        2528            db 0x00
 009C           2529   __str_5:
 009C 56405031  2530            db 'V@P1.4=%7.5f'
@@ -2627,20 +2627,26 @@
 015A 0A        2571            db 0x0A
 015B 00        2572            db 0x00
 015C           2573   __str_14:
-015C 252E3166  2574            db '%.1frad fr=%.1f/'
+015C 252E3266  2574            db '%.2frad fr=%.1f'
      72616420
      66723D25
-     2E31662F
-016C 0A        2575            db 0x0A
-016D 00        2576            db 0x00
-016E           2577   __str_15:
-016E 252E3166  2578            db '%.1fdeg fr=%.1f/'
+     2E3166
+016B 00        2575            db 0x00
+016C           2576   __str_15:
+016C 7265663D  2577            db 'ref=%.1f test=%.3f'
+     252E3166
+     20746573
+     743D252E
+     3366
+017E 0A        2578            db 0x0A
+017F 00        2579            db 0x00
+0180           2580   __str_16:
+0180 252E3166  2581            db '%.1fdeg fr=%.1f'
      64656720
      66723D25
-     2E31662F
-017E 0A        2579            db 0x0A
-017F 00        2580            db 0x00
-0180           2581   
-0003           2582            CSEG
-0003           2583   
-0003           2584   end
+     2E3166
+018F 00        2582            db 0x00
+0190           2583   
+0003           2584            CSEG
+0003           2585   
+0003           2586   end

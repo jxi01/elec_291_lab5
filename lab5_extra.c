@@ -460,15 +460,15 @@ void main (void)
                 while(P2_3 == 0){ // wait for button release
                     sprintf(buff1,"ref=%.1f test=%.1f\n",ref_rms,test_rms);
 		            LCDprint(buff1,1,1);
-		            sprintf(buff2,"%.1frad fr=%.1f/\n",phase_diff*3.141592653/180,frequency); //show rad if button is pressed
+		            sprintf(buff2,"%.2frad fr=%.1f",phase_diff*3.141592653/180,frequency); //show rad if button is pressed
 		            LCDprint(buff2,2,1);
                 }
             }
         }
 		//print on LCD, ref_rms, test_rms, phase_diff
-		sprintf(buff1,"ref=%.1f test=%.1f\n",ref_rms,test_rms);
+		sprintf(buff1,"ref=%.1f test=%.3f\n",ref_rms,test_rms);
 		LCDprint(buff1,1,1);
-		sprintf(buff2,"%.1fdeg fr=%.1f/\n",phase_diff,frequency);
+		sprintf(buff2,"%.1fdeg fr=%.1f",phase_diff,frequency);
 		LCDprint(buff2,2,1);
 
 	 }  

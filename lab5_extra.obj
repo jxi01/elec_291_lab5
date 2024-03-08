@@ -15,7 +15,7 @@ R_GSINIT,code,0000,NO
 R_BSEG,bit,0001,NO
 R_XSEG,xdata,0000,NO
 BIT_BANK,data,0000,OV
-R_CONST,code,0180,NO
+R_CONST,code,0190,NO
 rbank0,data,0000,OV
 R_PSEG,xdata,0000,NO
 R_DINIT,code,0000,NO
@@ -57,7 +57,8 @@ __str_11,R_CONST,0118,0000
 __str_12,R_CONST,012F,0000
 __str_13,R_CONST,0148,0000
 __str_14,R_CONST,015C,0000
-__str_15,R_CONST,016E,0000
+__str_15,R_CONST,016C,0000
+__str_16,R_CONST,0180,0000
 L004001?,R_CSEG,0086,0000
 _main_period_1_75,R_DSEG,0019,0004
 L017007?,R_CSEG,035F,0000
@@ -1587,9 +1588,9 @@ C0 data8(_main_ref_rms_1_75;)
 C0 data8(_main_ref_rms_1_75;0x0001;+;)
 C0 data8(_main_ref_rms_1_75;0x0002;+;)
 C0 data8(_main_ref_rms_1_75;0x0003;+;)
-74 data8(__str_13;)
+74 data8(__str_15;)
 C0 E0
-74 data8(__str_13;0x0008;>>;)
+74 data8(__str_15;0x0008;>>;)
 C0 E0
 74 80
 C0 E0
@@ -1620,9 +1621,9 @@ C0 06
 C0 07
 C0 00
 C0 01
-74 data8(__str_15;)
+74 data8(__str_16;)
 C0 E0
-74 data8(__str_15;0x0008;>>;)
+74 data8(__str_16;0x0008;>>;)
 C0 E0
 74 80
 C0 E0
@@ -1685,7 +1686,7 @@ D2 bit(_LCDprint_PARM_3;)
 00
 4D 61 72 20 20 37 20 32 30 32 34 
 00
-30 31 3A 34 35 3A 31 38 
+31 33 3A 31 37 3A 33 31 
 00
 56 40 50 31 2E 34 3D 25 37 2E 35 66 
 0D
@@ -1728,11 +1729,13 @@ D2 bit(_LCDprint_PARM_3;)
 66 
 0A
 00
-25 2E 31 66 72 61 64 20 66 72 3D 25 2E 31 66 2F 
+25 2E 32 66 72 61 64 20 66 72 3D 25 2E 31 66 
+00
+72 65 66 3D 25 2E 31 66 20 74 65 73 74 3D 25 2E 33
+66 
 0A
 00
-25 2E 31 66 64 65 67 20 66 72 3D 25 2E 31 66 2F 
-0A
+25 2E 31 66 64 65 67 20 66 72 3D 25 2E 31 66 
 00
 </CODE>
 
